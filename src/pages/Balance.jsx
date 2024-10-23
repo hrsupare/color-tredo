@@ -11,14 +11,13 @@ const Balance = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false); // New loading state
+  const [error, setError] = useState(""); // State for error message
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
         const response = await fetch(
-          `${BASE_URL}userGame/getByUserId?userID=${localStorage.getItem(
-            "userId"
-          )}`
+          `${BASE_URL}userGame/getByUserId?userID=${localStorage.getItem("userId")}`
         );
         const data = await response.json();
         setUserData(data.object);
@@ -31,16 +30,13 @@ const Balance = () => {
   }, []);
 
   const handleNotification = async () => {
-    if (showNotification === true) {
+    if (showNotification) {
       setShowNotification(false);
       return;
-    } else {
-      setShowNotification(true);
     }
+    setShowNotification(true);
 
-    const apiUrl = `${BASE_URL}admin/userNotificationList?getUserId=${localStorage.getItem(
-      "referenceId"
-    )}`;
+    const apiUrl = `${BASE_URL}admin/userNotificationList?getUserId=${localStorage.getItem("referenceId")}`;
 
     setLoading(true); // Start loading before fetch
     try {
@@ -71,22 +67,50 @@ const Balance = () => {
       await axios.get(handleConfirmWithdrawUrl);
       setIsModalOpen(false);
       setSelectedNotification(null);
-      setNotifications([])
+      setNotifications([]);
+      setError(""); // Clear any existing error
       alert("Withdrawal confirmed successfully!");
-      
     } catch (error) {
       console.error("Error confirming withdrawal:", error);
+    }
+  };
+
+  const handleDeclineWithdraw = async () => {
+    if (notifications.length === 0 || !notifications[0]?.withdrawTransaction_id) {
+      alert("No valid notification available for withdrawal.");
+      return;
+    }
+
+    const withdrawID = notifications[0].withdrawTransaction_id;
+    const declineWithdrawUrl = `${BASE_URL}UserAdminCancel/cancelWithdraw?withdrawID=${withdrawID}`;
+
+    try {
+      const response = await axios.patch(declineWithdrawUrl);
+      if (response.data.status === "success") {
+        setIsModalOpen(false);
+        setSelectedNotification(null);
+        setNotifications([]);
+        setError(""); // Clear any existing error
+        alert("Withdrawal transaction declined successfully!");
+      } else {
+        setError(response.data.message); // Set the error message
+      }
+    } catch (error) {
+      console.error("Error declining withdrawal:", error);
+      setError("An error occurred while declining the withdrawal."); // Set a generic error message
     }
   };
 
   const openModal = (notification) => {
     setSelectedNotification(notification);
     setIsModalOpen(true);
+    setError(""); // Reset error message when opening modal
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedNotification(null);
+    setError(""); // Clear error on modal close
   };
 
   return (
@@ -129,9 +153,7 @@ const Balance = () => {
                     >
                       <p>
                         <strong>Date & Time:</strong>{" "}
-                        {new Date(
-                          notification.withdrawTransactionsDateAndTime
-                        ).toLocaleString()}
+                        {new Date(notification.withdrawTransactionsDateAndTime).toLocaleString()}
                       </p>
                       <p>
                         <strong>Sender ID:</strong>{" "}
@@ -154,17 +176,15 @@ const Balance = () => {
 
       {/* Confirmation Modal */}
       {isModalOpen && selectedNotification && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out">
-          <div className="bg-white rounded-xl shadow-xl p-6 max-w-sm w-full mx-4 md:max-w-md md:p-8 transition-transform transform scale-100">
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
+          <div className="p-4 bg-white shadow-md rounded-lg max-w-sm mx-auto sm:max-w-md sm:p-6">
             <h2 className="text-lg md:text-xl font-semibold mb-4 text-gray-800 text-center">
               Withdrawal Details
             </h2>
             <div className="text-sm md:text-base text-gray-700 mb-4 space-y-2">
               <p>
                 <strong>Date & Time:</strong>{" "}
-                {new Date(
-                  selectedNotification.withdrawTransactionsDateAndTime
-                ).toLocaleString()}
+                {new Date(selectedNotification.withdrawTransactionsDateAndTime).toLocaleString()}
               </p>
               <p>
                 <strong>Sender ID:</strong>{" "}
@@ -174,13 +194,16 @@ const Balance = () => {
                 <strong>Transaction Amount:</strong> ₹
                 {selectedNotification.transactionAmount}
               </p>
+              {error && (
+                <p className="text-red-500">{error}</p> // Display error message in red
+              )}
             </div>
             <div className="flex flex-col md:flex-row justify-end mt-6 gap-3">
               <button
                 className="bg-gray-300 hover:bg-gray-400 text-black font-medium rounded-lg px-4 py-2 w-full md:w-auto transition-colors duration-300"
-                onClick={closeModal}
+                onClick={handleDeclineWithdraw} // Call decline function
               >
-                Cancel
+                Decline
               </button>
               <button
                 onClick={handleConfirmWithdraw}
