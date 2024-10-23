@@ -12,9 +12,8 @@ const AdminPage = () => {
   const [name, setName] = useState(location.state?.name || "");
   const [totalBalance, setTotalBalance] = useState(location.state?.totalBalance || 0);
 
-  // Fetch data if referenceId is missing and role is SUPERADMIN
-  useEffect(() => {
-    if (!referenceId && localStorage.getItem("role") === "SUPERADMIN" && localStorage.getItem("referenceId")) {
+   useEffect(() => {
+    if (!referenceId && localStorage.getItem("role") === "ADMIN" && localStorage.getItem("referenceId")) {
       console.log("SUPERADMIN SPOTTED");
 
       const getSuperAdminData = async () => {
@@ -30,7 +29,7 @@ const AdminPage = () => {
             // Update state with fetched data
             setReferenceId(response.data.object.referenceId);
             setName(response.data.object.name);
-            setTotalBalance(response.data.object.totalBalance);
+            setTotalBalance(response.data.object.totalBalnce);
           }
         } catch (error) {
           console.error("Error fetching data:", error);

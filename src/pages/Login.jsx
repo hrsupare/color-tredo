@@ -79,7 +79,7 @@ const Login = () => {
           state: {
             referenceId: data.object.referenceId,
             name: data.object.name,
-            totalBalance: data.object.totalBalance,
+            totalBalance: data.object.totalBalnce,
           },
         });
       }
@@ -88,7 +88,7 @@ const Login = () => {
           state: {
             referenceId: data.object.referenceId,
             name: data.object.name,
-            totalBalance: data.object.totalBalance,
+            totalBalance: data.object.totalBalnce,
           },
         });
       }

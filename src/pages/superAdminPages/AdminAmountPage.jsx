@@ -11,7 +11,7 @@ const AdminAmountPage = () => {
   const [isExploding, setIsExploding] = useState(false);
   const nav = useNavigate();
   const location = useLocation();
-  const { adminId, name, totalBalance } = location.state || {};
+  const { adminId, name } = location.state || {};
   const [amount, setAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -32,16 +32,23 @@ const AdminAmountPage = () => {
         }
       );
       console.log(proceedRecharge.data, "proceedRecharge");
+      
       if (!isExploding) {
         setIsExploding(true);
       }
-
-      nav("/superadmin");
+  
+      // Add a 2-second delay before navigating
+      setTimeout(() => {
+        nav("/superadmin");
+        setIsExploding(false);
+      }, 2000); // 2000 milliseconds = 2 seconds
+  
     } catch (error) {
       console.log(error.response.data.message, "error");
-      setErrorMessage("Insufficient funds in sender account ");
+      setErrorMessage("Insufficient funds in sender account");
     }
   };
+
   return (
     <div className="flex flex-col items-center justify-center gap-6 mt-16 p-8 bg-gradient-to-b from-indigo-200 via-white to-indigo-200 rounded-lg shadow-xl max-w-md mx-auto transition-all duration-500">
       {isExploding && <ConfettiExplosion />}
@@ -111,7 +118,7 @@ const AdminAmountPage = () => {
               d="M18.364 5.636l-1.414 1.414a1 1 0 00-.293.707v8.486a1 1 0 01-1 1H8.343a1 1 0 01-1-1V7.757a1 1 0 00-.293-.707L5.636 5.636a2 2 0 010-2.828l1.414-1.414a2 2 0 012.828 0L12 4.93l2.122-2.122a2 2 0 012.828 0l1.414 1.414a2 2 0 010 2.828z"
             />
           </svg>
-          <p className="text-sm font-medium">{errorMessage}</p>
+          <p className="text-base font-bold">{errorMessage}</p>
         </div>
       )}
       <div className="flex items-center justify-between w-full">

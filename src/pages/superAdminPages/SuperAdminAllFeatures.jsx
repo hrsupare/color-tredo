@@ -18,7 +18,6 @@ const SuperAdmin = () => {
   const [name, setName] = useState(location.state?.name || "");
   const [totalBalance, setTotalBalance] = useState(location.state?.totalBalance || 0);
 
-  // Fetch data if referenceId is missing and role is SUPERADMIN
   useEffect(() => {
     if (!referenceId && localStorage.getItem("role") === "SUPERADMIN" && localStorage.getItem("referenceId")) {
       console.log("SUPERADMIN SPOTTED");
@@ -29,12 +28,12 @@ const SuperAdmin = () => {
           console.log(URL, "URL");
 
           const response = await axios.get(URL);
-        console.log(response.data, "response.data")
+          console.log(response.data, "response.data")
           if (response.data) {
             // Update state with fetched data
             setReferenceId(response.data.object.referenceId);
             setName(response.data.object.name);
-            setTotalBalance(response.data.object.totalBalance);
+            setTotalBalance(response.data.object.totalBalnce);
           }
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -44,6 +43,7 @@ const SuperAdmin = () => {
       getSuperAdminData(); // Call the function to fetch data
     }
   }, [referenceId]);
+
   const handleSignOut = () => {
     localStorage.clear("userId");
     localStorage.clear("authToken");
@@ -67,7 +67,7 @@ const SuperAdmin = () => {
             <span className="font-semibold text-blue-600"> {referenceId}</span>
           </p>
           <p className="text-lg text-gray-800">
-            Total: 
+            Total:
             <span className="font-semibold text-blue-600">
               ₹ {totalBalance}
             </span>

@@ -16,7 +16,7 @@ const AdminUserRechargeUserIdPage = () => {
     name: "",
     email: "",
     mobileNo: "",
-    totalBalance: 0,
+     
   });
 
   const handleVerify = async () => {
@@ -118,13 +118,7 @@ const AdminUserRechargeUserIdPage = () => {
               {userData.mobileNo || "N/A"}
             </p>
           </div>
-          <div className="flex items-center mb-3">
-            <FaUserAlt className="text-indigo-500 text-xl mr-3" />
-            <p className="text-base font-semibold text-gray-800">
-              <span className="text-indigo-600">Total Balance:</span> ₹{" "}
-              {userData.totalBalance || 0}
-            </p>
-          </div>
+         
         </div>
       )}
 
@@ -155,7 +149,7 @@ const AdminUserRechargeUserIdPage = () => {
                 state: {
                   userId,
                   name: userData.name,
-                  totalBalance: userData.totalBalance,
+                   
                 },
               })
             }

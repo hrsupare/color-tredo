@@ -1,23 +1,26 @@
 import { useState } from "react";
 import { FaMoneyBillWave } from "react-icons/fa";
- import ButtonUI from "../../../ui/ButtonUI";
+import ButtonUI from "../../../ui/ButtonUI";
 import ConfettiExplosion from "react-confetti-explosion";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../../../../constant";
 import { Input } from "@material-tailwind/react";
- 
+
 const AdminUserRechargeAmountPage = () => {
   const [isExploding, setIsExploding] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { userId, name, totalBalance } = location.state || {};
+  const { userId, name } = location.state || {};
   const [amount, setAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const loggedInUserId = localStorage.getItem("referenceId");
-
+  console.log(loggedInUserId, "DEBUG@313 ::::::: loggedInUserId");
+  console.log(userId, "DEBUG@313 ::::::: userId");
+  console.log(amount, "DEBUG@313 ::::::: amount");
   const handleRecharge = async () => {
     try {
+      setErrorMessage("");
       const proceedRecharge = await axios.patch(
         `${BASE_URL}admin/recharge`,
         null,
@@ -29,17 +32,23 @@ const AdminUserRechargeAmountPage = () => {
           },
         }
       );
- 
+      console.log(
+        proceedRecharge,
+        "DEBUG@313 ::::::::::::::::::::::::::::::::::::: proceedRecharge"
+      );
       if (!isExploding) {
         setIsExploding(true);
       }
 
-      nav("/admin");
+      // Add a 2-second delay before navigating
+      setTimeout(() => {
+        navigate("/admin");
+        setIsExploding(false);
+      }, 2000); // 2000 milliseconds = 2 seconds
     } catch (error) {
-       setErrorMessage("Insufficient funds in sender account ");
+      setErrorMessage("Insufficient funds in sender account ");
     }
   };
-
 
   return (
     <div className="flex flex-col items-center justify-center gap-8 mt-10 p-6 bg-gradient-to-b from-indigo-300 via-white to-indigo-300 rounded-xl shadow-2xl w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto transition-all duration-500 transform hover:scale-105">
@@ -117,7 +126,7 @@ const AdminUserRechargeAmountPage = () => {
         </div>
       )}
 
-<div className="flex items-center justify-between w-full mb-4">
+      <div className="flex items-center justify-between w-full mb-4">
         {/* Back Button on the left */}
         <ButtonUI
           onClick={() => navigate(-1)}

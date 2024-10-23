@@ -16,7 +16,7 @@ const AdminIdPage = () => {
     name: "",
     email: "",
     mobileNo: "",
-    totalBalance: 0,
+     
   });
 
   const handleVerify = async () => {
@@ -93,28 +93,10 @@ const AdminIdPage = () => {
           <p className="text-sm font-medium">{errorMessage}</p>
         </div>
       )}
-      <div className="flex items-center justify-between w-full mb-4">
-        <ButtonUI
-          onClick={() => navigate(-1)}
-          className="flex items-center justify-center py-3 text-lg bg-gray-200 hover:bg-gray-300 text-gray-700 transition duration-300 rounded-lg shadow-lg"
-        >
-          <span>Back</span>
-        </ButtonUI>
-
-        <ButtonUI
-          onClick={handleVerify}
-          disabled={isVerifying}
-          className="flex items-center justify-center py-3 text-lg bg-indigo-600 hover:bg-indigo-700 text-white transition duration-300 rounded-lg shadow-lg"
-        >
-          <span className="font-semibold">
-            {isVerifying ? "Verifying..." : "Verify"}
-          </span>
-        </ButtonUI>
-      </div>
 
       {isVerified && (
         <div className="mt-6 p-6 bg-white rounded-lg shadow-lg w-full transition-all duration-300 transform hover:scale-105">
-          <h2 className="text-2xl font-extrabold text-indigo-900 mb-4 tracking-wide border-b-2 pb-2 border-indigo-200">
+          <h2 className="text-xl font-extrabold text-indigo-900 mb-4 tracking-wide border-b-2 pb-2 border-indigo-200">
             Admin Information
           </h2>
           <div className="flex items-center mb-3">
@@ -138,32 +120,45 @@ const AdminIdPage = () => {
               {adminData.mobileNo || "N/A"}
             </p>
           </div>
-          <div className="flex items-center mb-3">
-            <FaUserAlt className="text-indigo-500 text-xl mr-3" />
-            <p className="text-base font-semibold text-gray-800">
-              <span className="text-indigo-600">Total Balance:</span> ₹{" "}
-              {adminData.totalBalance || 0}
-            </p>
-          </div>
+         
         </div>
       )}
 
-      {isVerified && (
+      <div className="flex items-center justify-between w-full mb-4">
         <ButtonUI
-          onClick={() =>
-            navigate("/superadmin/admin/1/name/amount", {
-              state: {
-                adminId,
-                name: adminData.name,
-                totalBalance: adminData.totalBalance,
-              },
-            })
-          }
-          className="flex items-center justify-center w-full py-3 text-lg bg-indigo-600 hover:bg-indigo-700 text-white transition duration-300 rounded-lg shadow-lg"
+          onClick={() => navigate(-1)}
+          className="flex items-center justify-center py-3 text-lg bg-gray-200 hover:bg-gray-300 text-gray-700 transition duration-300 rounded-lg shadow-lg"
         >
-          <span className="font-semibold">Next</span>
+          <span>Back</span>
         </ButtonUI>
-      )}
+        {!isVerified && (
+          <ButtonUI
+            onClick={handleVerify}
+            disabled={isVerifying}
+            className="flex items-center justify-center py-3 text-lg bg-indigo-600 hover:bg-indigo-700 text-white transition duration-300 rounded-lg shadow-lg"
+          >
+            <span className="font-semibold">
+              {isVerifying ? "Verifying..." : "Verify"}
+            </span>
+          </ButtonUI>
+        )}
+        {isVerified && (
+          <ButtonUI
+            onClick={() =>
+              navigate("/superadmin/admin/1/name/amount", {
+                state: {
+                  adminId,
+                  name: adminData.name,
+                   
+                },
+              })
+            }
+            className="flex items-center justify-center w-full py-3 text-lg bg-indigo-600 hover:bg-indigo-700 text-white transition duration-300 rounded-lg shadow-lg"
+          >
+            <span className="font-semibold">Next</span>
+          </ButtonUI>
+        )}
+      </div>
     </div>
   );
 };

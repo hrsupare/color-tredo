@@ -30,13 +30,18 @@ const UserAmountPage = () => {
           },
         }
       );
- 
+
       if (!isExploding) {
         setIsExploding(true);
       }
-      nav("/superadmin");
+
+      // Add a 2-second delay before navigating
+      setTimeout(() => {
+        navigate("/superadmin");
+        setIsExploding(false);
+      }, 2000); // 2000 milliseconds = 2 seconds
     } catch (error) {
-       setErrorMessage("Insufficient funds in sender account ");
+      setErrorMessage("Insufficient funds in sender account ");
     }
   };
   return (
@@ -95,7 +100,6 @@ const UserAmountPage = () => {
         />
       </div>
 
-      
       {errorMessage && (
         <div className="flex items-center bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded-lg shadow-sm">
           <svg

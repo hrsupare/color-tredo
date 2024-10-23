@@ -43,6 +43,14 @@ const BottomNavBar = () => {
           <span className="material-icons text-3xl text-black">person</span> 
           <span className="text-s font-serif font-bold text-black">Profile</span>
         </button>
+        <button 
+          onClick={() => handleNavigation('/balance')} 
+          className="flex flex-col items-center space-y-1 hover:text-blue-600 transition-colors duration-200"
+          aria-label="Go to Profile"
+        >
+          <span className="material-icons text-3xl text-black">account_balance_wallet</span> 
+          <span className="text-s font-serif font-bold text-black">Balance</span>
+        </button>
       </div>
     </nav>
   );

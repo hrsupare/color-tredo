@@ -16,9 +16,7 @@ const UserIdPage = () => {
     name: "",
     email: "",
     mobileNo: "",
-    totalBalance: 0,
   });
- 
 
   const handleVerify = async () => {
     if (isVerifying) return;
@@ -32,8 +30,8 @@ const UserIdPage = () => {
 
     try {
       const URL = `${BASE_URL}admin/getByReferenceId?referenceId=${userId}`;
-       const getData = await axios.get(URL);
-       if (getData.data && getData.data.object) {
+      const getData = await axios.get(URL);
+      if (getData.data && getData.data.object) {
         setUserData(getData.data.object);
         setIsVerified(true);
       } else {
@@ -92,29 +90,6 @@ const UserIdPage = () => {
           <p className="text-sm font-medium">{errorMessage}</p>
         </div>
       )}
-
-       <div className="flex justify-between w-full">
-        {/* Back Button */}
-        <ButtonUI
-          onClick={() => navigate(-1)}
-          className="flex items-center justify-center w-[48%] py-3 text-lg bg-gray-200 hover:bg-gray-300 text-gray-700 transition duration-300 rounded-lg shadow-lg"
-        >
-          {/* <AiOutlineArrowLeft className="mr-2" /> */}
-          <span>Back</span>
-        </ButtonUI>
-
-        {/* Verify Button */}
-        <ButtonUI
-          onClick={handleVerify}
-          disabled={isVerifying} // Disable the button during verification
-          className="flex items-center justify-center w-[48%] py-3 text-lg bg-indigo-600 hover:bg-indigo-700 text-white transition duration-300 rounded-lg shadow-lg"
-        >
-          <span className="font-semibold">
-            {isVerifying ? "Verifying..." : "Verify"}
-          </span>
-        </ButtonUI>
-      </div>
-
       {isVerified && (
         <div className="mt-6 p-6 bg-white rounded-lg shadow-lg w-full transition-all duration-300 transform hover:scale-105">
           <h2 className="text-2xl font-extrabold text-indigo-900 mb-4 tracking-wide border-b-2 pb-2 border-indigo-200">
@@ -141,34 +116,47 @@ const UserIdPage = () => {
               {userData.mobileNo || "N/A"}
             </p>
           </div>
-          <div className="flex items-center mb-3">
-            <FaUserAlt className="text-indigo-500 text-xl mr-3" />
-            <p className="text-base font-semibold text-gray-800">
-              <span className="text-indigo-600">Total Balance:</span> ₹{" "}
-              {userData.totalBalance || 0}
-            </p>
-          </div>
         </div>
       )}
-
-
-
-      {isVerified && (
+      <div className="flex justify-between w-full">
+        {/* Back Button */}
         <ButtonUI
-          onClick={() =>
-            navigate("/superadmin/user/1/name/amount", {
-              state: {
-                userId,
-                name: userData.name,
-                totalBalance: userData.totalBalance,
-              },
-            })
-          }
-          className="flex items-center justify-center w-full py-3 text-lg bg-indigo-600 hover:bg-indigo-700 text-white transition duration-300 rounded-lg shadow-lg mt-4"
+          onClick={() => navigate(-1)}
+          className="flex items-center justify-center w-[48%] py-3 text-lg bg-gray-200 hover:bg-gray-300 text-gray-700 transition duration-300 rounded-lg shadow-lg"
         >
-          <span className="font-semibold">Next</span>
+          {/* <AiOutlineArrowLeft className="mr-2" /> */}
+          <span>Back</span>
         </ButtonUI>
-      )}
+
+        {/* Verify Button */}
+        {!isVerified && (
+          <ButtonUI
+            onClick={handleVerify}
+            disabled={isVerifying} // Disable the button during verification
+            className="flex items-center justify-center w-[48%] py-3 text-lg bg-indigo-600 hover:bg-indigo-700 text-white transition duration-300 rounded-lg shadow-lg"
+          >
+            <span className="font-semibold">
+              {isVerifying ? "Verifying..." : "Verify"}
+            </span>
+          </ButtonUI>
+        )}
+
+        {isVerified && (
+          <ButtonUI
+            onClick={() =>
+              navigate("/superadmin/user/1/name/amount", {
+                state: {
+                  userId,
+                  name: userData.name,
+                },
+              })
+            }
+            className="flex items-center justify-center w-full py-3 text-lg bg-indigo-600 hover:bg-indigo-700 text-white transition duration-300 rounded-lg shadow-lg mt-4"
+          >
+            <span className="font-semibold">Next</span>
+          </ButtonUI>
+        )}
+      </div>
     </div>
   );
 };

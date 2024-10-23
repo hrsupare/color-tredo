@@ -198,7 +198,7 @@ import React from 'react';
 
 export function NavbarDefault() {
   return (
-    <div className="flex justify-center mt-4">
+    <div className="flex justify-center ">
       <div className="font-bold text-2xl sm:text-xl w-full max-w-sm text-center bg-gradient-to-r from-indigo-500 to-indigo-100 hover:from-indigo-600 hover:to-indigo-200 p-4 rounded-2xl">
         Parity
       </div>
