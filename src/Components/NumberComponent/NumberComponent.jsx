@@ -88,53 +88,49 @@ export const NumberComponent = () => {
           className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50"
           onClick={handleOutsideClick}
         >
-          <div className="p-6 sm:p-8 bg-white shadow-xl rounded-xl font-serif max-w-lg mx-auto w-full">
-            <h2 className="font-bold text-md sm:text-lg mb-4 text-center">
-              {`Join ${selectedNumber}`}
-            </h2>
+          <div className="p-4 bg-white shadow-md rounded-lg max-w-sm mx-auto sm:max-w-md sm:p-6">
+            <h2 className="font-bold text-lg mb-3 text-center">{`Join ${selectedNumber}`}</h2>
 
             {/* Input Field with Submit Button inside */}
-            <div className="flex flex-col sm:flex-row mb-4">
+            <div className="flex mb-3">
               <input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="0"
-                className="flex-1 border border-gray-300 rounded-t-lg sm:rounded-l-lg sm:rounded-t-none px-4 py-3 h-[3rem]"
+                className="flex-1 border border-gray-300 rounded-l-md px-3 py-2 h-[2.5rem] text-sm"
               />
-              <button className="bg-blue-500 text-white rounded-b-lg sm:rounded-r-lg sm:rounded-b-none px-4 h-[3rem]">
-                Recharge
-              </button>
+              <button className="bg-blue-500 text-white rounded-r-md px-3 h-[2.5rem]">Recharge</button>
             </div>
 
-            {/* Contract Money Buttons */}
-            <p className="text-sm sm:text-md">Contract Money</p>
-            <div className="flex space-x-1 mb-4">
-              <button className="flex-1 bg-gray-200 rounded-lg py-1">10</button>
-              <button className="flex-1 bg-gray-200 rounded-lg py-1">100</button>
-              <button className="flex-1 bg-gray-200 rounded-lg py-1">1000</button>
-              <button className="flex-1 bg-gray-200 rounded-lg py-1">10000</button>
+            {/* Buttons Below Input Field in one line */}
+            <p className="text-sm">Contract Money</p>
+            <div className="flex space-x-1 mb-3">
+              <button className="flex-1 bg-gray-200 rounded-md py-1 text-sm">10</button>
+              <button className="flex-1 bg-gray-200 rounded-md py-1 text-sm">100</button>
+              <button className="flex-1 bg-gray-200 rounded-md py-1 text-sm">1000</button>
+              <button className="flex-1 bg-gray-200 rounded-md py-1 text-sm">10000</button>
             </div>
 
-            {/* Number Adjusters */}
-            <p className="text-sm sm:text-md">Numbers</p>
+            <p className="text-sm">Numbers</p>
             <div className="flex justify-between mb-2">
               <div className="flex space-x-1">
-                <button className="bg-gray-200 rounded-lg py-1 w-12">-5</button>
-                <button className="bg-gray-200 rounded-lg py-1 w-12">-1</button>
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm">-5</button>
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm">-1</button>
               </div>
+
               <div className="flex space-x-1">
-                <button className="bg-gray-200 rounded-lg py-1 w-12">+1</button>
-                <button className="bg-gray-200 rounded-lg py-1 w-12">+5</button>
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm">+1</button>
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm">+5</button>
               </div>
             </div>
 
-            <p className="text-sm sm:text-md">Total Contract money is 10</p>
+            <p className="text-sm">Total Contract money is 10</p>
 
             {/* Confirm Button */}
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-end mt-3">
               <button
-                className="bg-green-500 text-white text-sm sm:text-md rounded-lg px-4 py-2 h-[3rem]"
+                className="bg-green-500 text-white text-sm rounded-md px-4 py-2 h-[2.5rem]"
                 onClick={handleClosePopup}
               >
                 Confirm
