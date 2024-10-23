@@ -90,7 +90,7 @@ const Balance = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2 p-2 bg-gradient-to-r from-indigo-100 to-white rounded-lg shadow-lg max-w-lg mx-auto w-full transition-all duration-500">
+    <div className="flex flex-col items-center justify-center  gap-2 p-2 bg-gra max-w-lg mx-auto w-full transition-all duration-500">
       <div className="relative flex justify-center items-center p-2 w-full">
         <div className="bg-white w-full max-w-lg rounded-lg shadow-lg p-6 relative">
           <IoNotifications
