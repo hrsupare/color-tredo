@@ -12,29 +12,29 @@ const Orders = () => {
 
     return (
         <div>
-            <div className="flex flex-col items-center justify-center gap-2 p-2 max-w-lg mx-auto w-full transition-all duration-500">
-                <h2 className="text-lg font-semibold mb-2">Orders</h2>
+            <div className="flex flex-col items-center justify-center gap-4 p-4 max-w-full mx-auto w-full transition-all duration-500">
+                <h2 className="text-lg md:text-xl font-semibold mb-4">Orders</h2>
 
-                {/* Add a wrapper with overflow for table */}
+                {/* Wrapper with overflow for table */}
                 <div className="w-full overflow-x-auto">
-                    <table className="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
+                    <table className="w-full min-w-full bg-white rounded-lg overflow-hidden shadow-md">
                         <thead>
                             <tr className="bg-indigo-200 text-indigo-900">
-                                <th className="p-2 text-sm md:text-base">Period</th>
-                                <th className="p-2 text-sm md:text-base">Select </th>
-                                <th className="p-2 text-sm md:text-base">Point</th>
-                                <th className="p-2 text-sm md:text-base">Result</th>
-                                <th className="p-2 text-sm md:text-base">Amount</th>
+                                <th className="p-3 text-xs md:text-sm lg:text-base">Period</th>
+                                <th className="p-3 text-xs md:text-sm lg:text-base">Select</th>
+                                <th className="p-3 text-xs md:text-sm lg:text-base">Point</th>
+                                <th className="p-3 text-xs md:text-sm lg:text-base">Result</th>
+                                <th className="p-3 text-xs md:text-sm lg:text-base">Amount</th>
                             </tr>
                         </thead>
                         <tbody>
                             {data.map((item, index) => (
                                 <tr key={index} className="border-b last:border-none">
-                                    <td className="p-2 text-center text-sm md:text-base">{item.period}</td>
-                                    <td className="p-2 text-center text-sm md:text-base">{item.select}</td>
-                                    <td className="p-2 text-center text-sm md:text-base">{item.Point}</td>
-                                    <td className="p-2 text-center text-sm md:text-base">{item.result}</td>
-                                    <td className="p-2 text-center text-sm md:text-base">{item.amount}</td>
+                                    <td className="p-3 text-center text-xs md:text-sm lg:text-base">{item.period}</td>
+                                    <td className="p-3 text-center text-xs md:text-sm lg:text-base">{item.select}</td>
+                                    <td className="p-3 text-center text-xs md:text-sm lg:text-base">{item.Point}</td>
+                                    <td className="p-3 text-center text-xs md:text-sm lg:text-base">{item.result}</td>
+                                    <td className="p-3 text-center text-xs md:text-sm lg:text-base">{item.amount}</td>
                                 </tr>
                             ))}
                         </tbody>
