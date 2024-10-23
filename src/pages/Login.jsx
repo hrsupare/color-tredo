@@ -114,7 +114,7 @@ const Login = () => {
 
   return (
     <div
-      className="flex flex-col items-center justify-center gap-2 p-2 mt-8 max-w-lg mx-auto w-full"
+      className="flex flex-col items-center justify-center gap-2 p-2 mt-20 max-w-lg mx-auto w-full"
       style={{
         backgroundImage: 'url("/path-to-your-background-image.jpg")',
         backgroundSize: "cover",
