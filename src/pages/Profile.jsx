@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate hook for n
 import { FaUserCircle, FaFileAlt, FaRupeeSign, FaTelegramPlane, FaSignOutAlt } from "react-icons/fa";
 import BottomNavBar from '../Components/Navbar/BottomNavBar';
 import { BASE_URL } from '../../constant';
+import { ProfileNav } from '../Components/Navbar/ProfileNav';
 
 const Profile = () => {
     const [userData, setUserData] = useState(null);
@@ -37,6 +38,9 @@ const Profile = () => {
     };
 
     return (
+
+        <div>
+            <ProfileNav/>
         <div className='flex flex-col items-center justify-center  gap-2 p-2 bg-gra max-w-lg mx-auto w-full transition-all duration-500'>
             <div className="flex justify-center items-center p-2 w-full">
                 <div className="bg-white w-full rounded-lg shadow-lg p-4">
@@ -93,6 +97,7 @@ const Profile = () => {
             </div>
             <BottomNavBar />
         </div >
+        </div>
     );
 }
 

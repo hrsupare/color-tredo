@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import BottomNavBar from "../Components/Navbar/BottomNavBar";
+import { OrderNav } from "../Components/Navbar/OrderNav";
 
 const Orders = () => {
     const [data, setData] = useState([
@@ -12,8 +13,9 @@ const Orders = () => {
 
     return (
         <div>
+            <OrderNav/>
             <div className="flex flex-col items-center justify-center gap-4 p-4 max-w-full mx-auto w-full transition-all duration-500">
-                <h2 className="text-lg md:text-xl font-semibold mb-4">Orders</h2>
+                {/* <h2 className="text-lg md:text-xl font-semibold mb-4">Orders</h2> */}
 
                 {/* Wrapper with overflow for table */}
                 <div className="w-full overflow-x-auto">
