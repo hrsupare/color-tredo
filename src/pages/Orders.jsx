@@ -12,34 +12,38 @@ const Orders = () => {
 
     return (
         <div>
-            <div className="flex flex-col items-center justify-center gap-2 p-2  max-w-lg mx-auto w-full transition-all duration-500">
+            <div className="flex flex-col items-center justify-center gap-2 p-2 max-w-lg mx-auto w-full transition-all duration-500">
                 <h2 className="text-lg font-semibold mb-2">Orders</h2>
-                <table className="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
-                    <thead>
-                        <tr className="bg-indigo-200 text-indigo-900">
-                            <th className="p-2">Period</th>
-                            <th className="p-2">Select </th>
-                            <th className="p-2">Point</th>
-                            <th className="p-2">Result</th>
-                            <th className="p-2">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.map((item, index) => (
-                            <tr key={index} className="border-b last:border-none">
-                                <td className="p-2 text-center">{item.period}</td>
-                                <td className="p-2 text-center">{item.select}</td>
-                                <td className="p-2 text-center">{item.Point}</td>
-                                <td className="p-2 text-center">{item.result}</td>
-                                <td className="p-2 text-center">{item.amount}</td>
+
+                {/* Add a wrapper with overflow for table */}
+                <div className="w-full overflow-x-auto">
+                    <table className="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
+                        <thead>
+                            <tr className="bg-indigo-200 text-indigo-900">
+                                <th className="p-2 text-sm md:text-base">Period</th>
+                                <th className="p-2 text-sm md:text-base">Select </th>
+                                <th className="p-2 text-sm md:text-base">Point</th>
+                                <th className="p-2 text-sm md:text-base">Result</th>
+                                <th className="p-2 text-sm md:text-base">Amount</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {data.map((item, index) => (
+                                <tr key={index} className="border-b last:border-none">
+                                    <td className="p-2 text-center text-sm md:text-base">{item.period}</td>
+                                    <td className="p-2 text-center text-sm md:text-base">{item.select}</td>
+                                    <td className="p-2 text-center text-sm md:text-base">{item.Point}</td>
+                                    <td className="p-2 text-center text-sm md:text-base">{item.result}</td>
+                                    <td className="p-2 text-center text-sm md:text-base">{item.amount}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <BottomNavBar />
-        </div >
+        </div>
     );
 };
 
