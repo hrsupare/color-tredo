@@ -90,8 +90,8 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2 p-2 mt-8 max-w-lg mx-auto w-full transition-all duration-500">
-      <Card className="w-full max-w-md sm:max-w-xs bg-white transition-transform transform hover:scale-105 duration-300">
+    <div className="flex flex-col items-center justify-center gap-2 p-2 mt-8 max-w-lg mx-auto w-full ">
+      <Card className="w-full max-w-md sm:max-w-xs bg-white ">
         <CardHeader
           variant="gradient"
           color="indigo"

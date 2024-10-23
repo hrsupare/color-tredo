@@ -114,14 +114,14 @@ const Login = () => {
 
   return (
     <div
-      className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-400 to-indigo-600 p-4"
+      className="flex flex-col items-center justify-center gap-2 p-2 mt-8 max-w-lg mx-auto w-full"
       style={{
         backgroundImage: 'url("/path-to-your-background-image.jpg")',
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      <Card className="w-full sm:w-80 md:w-96 lg:w-96 bg-white bg-opacity-90 shadow-2xl rounded-lg transition-transform transform hover:scale-105 duration-300">
+      <Card className="w-full sm:w-80 md:w-96 lg:w-96 bg-white bg-opacity-90  ">
         <CardHeader
           variant="gradient"
           color="indigo"

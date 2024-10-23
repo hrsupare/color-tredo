@@ -46,7 +46,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
 const App = () => {
   return (
-    <div className="flex flex-col items-center justify-center gap-8 p-2  w-full max-w-md mx-auto transition-all duration-500">
+    <div className="flex flex-col items-center justify-center gap-8 p-2  w-full max-w-md mx-auto ">
       <Routes > 
         <Route element={<AppLayout />}>
           <Route
