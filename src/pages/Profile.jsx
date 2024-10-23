@@ -37,9 +37,9 @@ const Profile = () => {
     };
 
     return (
-        <div className='flex flex-col items-center justify-center gap-2 p-2 bg-gradient-to-r from-indigo-100 to-white rounded-lg shadow-lg max-w-lg mx-auto w-full transition-all duration-500'>
+        <div className='flex flex-col items-center justify-center gap-2 p-4 max-w-lg mx-auto w-full transition-all duration-500'>
             <div className="flex justify-center items-center p-2 w-full">
-                <div className="bg-white w-full max-w-lg rounded-lg shadow-lg p-4">
+                <div className="bg-white w-full rounded-lg shadow-lg p-4">
                     {/* User Information */}
                     <div className="flex items-center mb-4">
                         <FaUserCircle className="text-6xl text-gray-500" />
@@ -59,9 +59,8 @@ const Profile = () => {
                 </div>
             </div>
 
-
             <div className="flex justify-center items-center p-2 w-full">
-                <div className="bg-white w-full max-w-lg rounded-lg shadow-lg p-4">
+                <div className="bg-white w-full rounded-lg shadow-lg p-4">
                     <div className="flex items-center mb-4">
                         <ul className="divide-y divide-gray-200">
                             <li className="flex items-center justify-between py-3">
@@ -79,7 +78,7 @@ const Profile = () => {
                             <li className="flex items-center justify-between py-3">
                                 <div className="flex items-center">
                                     <FaTelegramPlane className="text-gray-500" />
-                                    <span className="ml-3 cursor-pointer">Follow us</span>
+                                    <span className="ml-3 cursor-pointer">Follow Us</span>
                                 </div>
                             </li>
                             <li className="flex items-center justify-between py-3 cursor-pointer" onClick={handleSignOut}>
@@ -94,9 +93,7 @@ const Profile = () => {
             </div>
             <BottomNavBar />
         </div >
-
-
-    )
+    );
 }
 
 export default Profile;
