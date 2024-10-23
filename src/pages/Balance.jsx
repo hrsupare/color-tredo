@@ -145,7 +145,7 @@ const Balance = () => {
                   ))}
                 </ul>
               ) : (
-                <p className="text-gray-500">No notifications available.</p>
+                <p className="text-gray-500 pl-2">No notifications available.</p>
               )}
             </div>
           </div>
