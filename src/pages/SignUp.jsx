@@ -59,20 +59,18 @@ const SignUp = () => {
       const URL = `${BASE_URL}account/register`;
 
       try {
-        let obj = {
+        const obj = {
           name: formData.name,
           email: formData.email,
           mobileNo: formData.mobileNo,
           roles: "USER",
           password: formData.password,
           referralId: formData.referralId,
-        }
-        console.log(obj,"object");
+        };
         
         const response = await axios.post(URL, obj);
 
-        console.log(response.data);
-        if (response.data.code==="Successful") {
+        if (response.data.code === "Successful") {
           navigate("/");
         } else {
           setErrorMessage(response.data.message || "Sign up failed. Please try again.");

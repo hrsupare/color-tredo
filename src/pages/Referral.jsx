@@ -5,7 +5,7 @@ import { ReferralNav } from '../Components/Navbar/ReferralNav';
 const Referral = () => {
     return (
         <div>
-            <ReferralNav />
+            {/* <ReferralNav /> */}
             <div className="flex flex-col items-center justify-center gap-2 p-2  max-w-lg mx-auto w-full transition-all duration-500">
                 {/* Agent Amount Section */}
                 <div className="flex justify-center items-center p-2 w-full">

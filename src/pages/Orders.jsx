@@ -13,7 +13,7 @@ const Orders = () => {
 
     return (
         <div>
-            <OrderNav/>
+            {/* <OrderNav/> */}
             <div className="flex flex-col items-center justify-center gap-4 p-4 max-w-full mx-auto w-full transition-all duration-500">
                 {/* <h2 className="text-lg md:text-xl font-semibold mb-4">Orders</h2> */}
 
