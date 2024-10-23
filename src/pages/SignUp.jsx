@@ -59,7 +59,7 @@ const SignUp = () => {
       const URL = `${BASE_URL}account/register`;
 
       try {
-        const obj = {
+        let obj = {
           name: formData.name,
           email: formData.email,
           mobileNo: formData.mobileNo,
@@ -67,9 +67,11 @@ const SignUp = () => {
           password: formData.password,
           referralId: formData.referralId,
         };
+        console.log(obj, "object");
         
         const response = await axios.post(URL, obj);
 
+        console.log(response.data);
         if (response.data.code === "Successful") {
           navigate("/");
         } else {
@@ -88,8 +90,8 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r py-10 px-4 sm:px-6 lg:px-8 font-serif">
-      <Card className="w-full max-w-md sm:w-96 bg-white shadow-2xl rounded-lg transition-transform transform hover:scale-105 duration-300">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r py-10 px-4 font-serif">
+      <Card className="w-full max-w-md sm:max-w-xs bg-white shadow-2xl rounded-lg transition-transform transform hover:scale-105 duration-300">
         <CardHeader
           variant="gradient"
           color="indigo"
@@ -102,7 +104,7 @@ const SignUp = () => {
             Sign Up
           </Typography>
         </CardHeader>
-        <CardBody className="flex flex-col gap-6 px-6 py-4">
+        <CardBody className="flex flex-col gap-4 px-6 py-4">
           <Input
             label="Name"
             size="lg"
