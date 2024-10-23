@@ -90,7 +90,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r py-10 px-4 font-serif">
+    <div className="flex flex-col items-center justify-center gap-2 p-2  max-w-lg mx-auto w-full transition-all duration-500">
       <Card className="w-full max-w-md sm:max-w-xs bg-white shadow-2xl rounded-lg transition-transform transform hover:scale-105 duration-300">
         <CardHeader
           variant="gradient"
