@@ -49,7 +49,7 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="mt-5 p-8 bg-gradient-to-r from-indigo-100 to-white rounded-lg shadow-lg max-w-lg mx-auto">
+    <div className="mt-5 p-8 bg-gradient-to-r max-w-lg mx-auto">
       <h1 className="text-4xl font-bold text-center text-indigo-800 mb-6">Admin Dashboard</h1>
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-1">
         Hello {name}
