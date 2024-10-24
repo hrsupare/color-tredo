@@ -5,9 +5,11 @@ import BottomNavBar from "../Navbar/BottomNavBar";
 export const NumberComponent = () => {
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [inputValue, setInputValue] = useState("");
+  const [totalContractMoney, setTotalContractMoney] = useState(0); // New state for total money
 
   const handleBadgeClick = (number) => {
     setSelectedNumber(number);
+    setTotalContractMoney(0); // Reset total when a new number is selected
   };
 
   const handleOutsideClick = (e) => {
@@ -41,6 +43,16 @@ export const NumberComponent = () => {
     }
   };
 
+  // Function to increment the total
+  const incrementTotal = (value) => {
+    setTotalContractMoney((prevTotal) => prevTotal + value);
+  };
+
+  // Function to decrement the total
+  const decrementTotal = (value) => {
+    setTotalContractMoney((prevTotal) => prevTotal - value);
+  };
+
   return (
     <div className="p-4 bg-white shadow-lg rounded-lg font-serif max-w-lg mx-auto">
       <div className="mb-6 font-extrabold text-lg sm:text-xl w-full text-center p-1 text-gray-1000">
@@ -57,7 +69,6 @@ export const NumberComponent = () => {
           >
             <Badge
               className={`h-8 w-8 sm:h-10 sm:w-10 text-xs sm:text-sm font-bold ${badgeBackgroundStyles(index)}`}
-              style={index === 0 || index === 5 ? { background: badgeBackgroundStyles(index) } : {}}
               content={index}
             />
           </button>
@@ -74,7 +85,6 @@ export const NumberComponent = () => {
           >
             <Badge
               className={`h-8 w-8 sm:h-10 sm:w-10 text-xs sm:text-sm font-bold ${badgeBackgroundStyles(number)}`}
-              style={number === 5 ? { background: badgeBackgroundStyles(number) } : {}}
               content={number}
             />
           </button>
@@ -115,17 +125,17 @@ export const NumberComponent = () => {
             <p className="text-sm">Numbers</p>
             <div className="flex justify-between mb-2">
               <div className="flex space-x-1">
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm">-5</button>
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm">-1</button>
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => decrementTotal(5)}>-5</button>
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => decrementTotal(1)}>-1</button>
               </div>
-
+              <div className="text-3xl font-bold">{totalContractMoney}</div>
               <div className="flex space-x-1">
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm">+1</button>
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm">+5</button>
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => incrementTotal(1)}>+1</button>
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => incrementTotal(5)}>+5</button>
               </div>
             </div>
 
-            <p className="text-sm">Total Contract money is 10</p>
+            <p className="text-sm">Total Contract money is {totalContractMoney}</p>
 
             {/* Confirm Button */}
             <div className="flex justify-end mt-3">

@@ -5,6 +5,7 @@ const GameDashboard = () => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [buttonColor, setButtonColor] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const [totalContractMoney, setTotalContractMoney] = useState(10); // Initialize with the default total
 
   const handleButtonClick = (color) => {
     setButtonColor(color);
@@ -19,6 +20,11 @@ const GameDashboard = () => {
     if (e.target.id === "popup-overlay") {
       handleClosePopup();
     }
+  };
+
+  // Function to update total contract money
+  const updateTotalContractMoney = (amount) => {
+    setTotalContractMoney((prevTotal) => prevTotal + amount);
   };
 
   return (
@@ -100,17 +106,40 @@ const GameDashboard = () => {
             <p className="text-sm">Numbers</p>
             <div className="flex justify-between mb-2">
               <div className="flex space-x-1">
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm">-5</button>
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm">-1</button>
+                <button 
+                  className="bg-gray-200 rounded-md py-1 w-10 text-sm" 
+                  onClick={() => updateTotalContractMoney(-5)} // Subtract 5
+                >
+                  -5
+                </button>
+                <button 
+                  className="bg-gray-200 rounded-md py-1 w-10 text-sm" 
+                  onClick={() => updateTotalContractMoney(-1)} // Subtract 1
+                >
+                  -1
+                </button>
               </div>
 
+              {/* Displaying total contract money */}
+              <div className="text-3xl font-bold">{totalContractMoney}</div>
+
               <div className="flex space-x-1">
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm">+1</button>
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm">+5</button>
+                <button 
+                  className="bg-gray-200 rounded-md py-1 w-10 text-sm" 
+                  onClick={() => updateTotalContractMoney(1)} // Add 1
+                >
+                  +1
+                </button>
+                <button 
+                  className="bg-gray-200 rounded-md py-1 w-10 text-sm" 
+                  onClick={() => updateTotalContractMoney(5)} // Add 5
+                >
+                  +5
+                </button>
               </div>
             </div>
 
-            <p className="text-sm">Total Contract money is 10</p>
+            <p className="text-sm">Total Contract money is {totalContractMoney}</p>
 
             {/* Confirm Button */}
             <div className="flex justify-end mt-3">

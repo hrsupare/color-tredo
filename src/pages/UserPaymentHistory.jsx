@@ -107,7 +107,7 @@ const UserPaymentHistory = () => {
 };
 
 const TableComponent = ({ data }) => (
-    <div className="flex flex-col items-center mt-10 p-8 max-w-2xl mx-auto">
+    <div className="flex flex-col items-center mt-2 p-8 max-w-2xl mx-auto">
         <table className="w-full table-auto border border-gray-300 rounded-lg overflow-hidden shadow-lg">
             <thead className="bg-black text-white w-full">
                 <tr>
