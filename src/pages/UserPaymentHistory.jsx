@@ -107,36 +107,38 @@ const UserPaymentHistory = () => {
 };
 
 const TableComponent = ({ data }) => (
-    <table className="w-full table-auto border mb-4 min-w-full  border-gray-300 rounded-lg overflow-hidden shadow-lg max-w-full">
-        <thead className="bg-black text-white w-full">
-            <tr>
-                <th className="py-3 text-left px-4">ID</th>
-                <th className="py-3 text-left px-4">Amount</th>
-                <th className="py-3 text-left px-4">Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            {data.length > 0 ? (
-                data.map((item, index) => (
-                    <tr
-                        key={index}
-                        className={`border-b text-gray-900 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                            } hover:bg-gray-100 transition duration-200`}
-                    >
-                        <td className="py-2 text-left px-6 font-semibold">{item.id}</td>
-                        <td className="py-2 text-left px-6 font-semibold">{item.amount}</td>
-                        <td className="py-2 text-left px-6 font-semibold">{item.date}</td>
-                    </tr>
-                ))
-            ) : (
+    <div className="overflow-x-auto">
+        <table className="min-w-full table-auto border mb-4 border-gray-300 rounded-lg overflow-hidden shadow-lg">
+            <thead className="bg-black text-white w-full">
                 <tr>
-                    <td colSpan="3" className="text-center py-4">
-                        No records found.
-                    </td>
+                    <th className="py-3 text-left px-4">ID</th>
+                    <th className="py-3 text-left px-4">Amount</th>
+                    <th className="py-3 text-left px-4">Date</th>
                 </tr>
-            )}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {data.length > 0 ? (
+                    data.map((item, index) => (
+                        <tr
+                            key={index}
+                            className={`border-b text-gray-900 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                                } hover:bg-gray-100 transition duration-200`}
+                        >
+                            <td className="py-2 text-left px-4 font-semibold">{item.id}</td>
+                            <td className="py-2 text-left px-4 font-semibold">{item.amount}</td>
+                            <td className="py-2 text-left px-4 font-semibold">{item.date}</td>
+                        </tr>
+                    ))
+                ) : (
+                    <tr>
+                        <td colSpan="3" className="text-center py-4">
+                            No records found.
+                        </td>
+                    </tr>
+                )}
+            </tbody>
+        </table>
+    </div>
 );
 
 export default UserPaymentHistory;
