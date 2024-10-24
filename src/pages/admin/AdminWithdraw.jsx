@@ -118,7 +118,7 @@ getStatusAfterWithdrawProceed()
   }, [isProcessing]); // Re-run effect when isProcessing changes
 
   return (
-    <div className="flex flex-col items-center justify-center gap-8 mt-16 p-6 md:p-8 lg:p-10 bg-gradient-to-b from-indigo-300 via-white to-indigo-300 rounded-xl shadow-2xl max-w-sm md:max-w-md lg:max-w-lg mx-auto transition-all duration-500 transform hover:scale-105">
+    <div className="flex flex-col items-center justify-center gap-8 mt-16 p-6 md:p-8 lg:p-10  max-w-sm md:max-w-md lg:max-w-lg mx-auto transition-all duration-500 transform hover:scale-105">
       <h1 className="text-2xl md:text-3xl font-bold text-center text-indigo-900 mb-4 md:mb-6 tracking-wide">
         Request Withdrawal
       </h1>

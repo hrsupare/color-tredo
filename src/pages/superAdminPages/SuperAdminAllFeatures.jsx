@@ -53,7 +53,7 @@ const SuperAdmin = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gradient-to-b from-indigo-200 via-white to-indigo-200 py-10 px-4 rounded-xl shadow-2xl">
+    <div className="flex flex-col items-center min-h-screen py-10 px-4 ">
       <h1 className="text-3xl font-bold text-center text-gray-800 mb-1">
         Super Admin Dashboard
       </h1>

@@ -90,7 +90,7 @@ const AdminSignUp = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r py-10 px-4 sm:px-6 lg:px-8 font-serif">
+    <div className="flex justify-center items-center min-h-screen py-10 px-4 sm:px-6 lg:px-8 font-serif">
       <Card className="w-full max-w-md sm:w-96 bg-white shadow-2xl rounded-lg transition-transform transform hover:scale-105 duration-300">
         <CardHeader
           variant="gradient"

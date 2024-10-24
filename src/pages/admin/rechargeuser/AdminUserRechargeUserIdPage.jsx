@@ -48,7 +48,7 @@ const AdminUserRechargeUserIdPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-6 mt-16 p-8 bg-gradient-to-b from-indigo-200 via-white to-indigo-200 rounded-lg shadow-xl max-w-sm mx-auto transition-all duration-500">
+    <div className="flex flex-col items-center justify-center gap-6 mt-16 p-8  max-w-sm mx-auto transition-all duration-500">
       <h1 className="text-2xl md:text-3xl font-extrabold text-center text-indigo-900 mb-4 md:mb-6 tracking-wide">
         Enter User Credentials
       </h1>

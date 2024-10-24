@@ -25,6 +25,7 @@ import AdminUserRechargeAmountPage from "./pages/admin/rechargeuser/AdminUserRec
 import UserIdPage from "./pages/superAdminPages/rechargeuser/UserIdPage";
 import Orders from "./pages/Orders";
 import Balance from "./pages/Balance";
+import UserPaymentHistory from "./pages/UserPaymentHistory";
 
 // ProtectedRoute component for role-based authentication
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -211,6 +212,7 @@ const App = () => {
         <Route path="/orders" element={<Orders />} />
         <Route path="/referral" element={<Referral />} />
         <Route path="/balance" element={<Balance />} />
+        <Route path="/userpaymenthistory" element={<UserPaymentHistory />} />
         <Route path="/unauthorized" element={<h1>Unauthorized Access</h1>} />
       </Routes>
     </div>

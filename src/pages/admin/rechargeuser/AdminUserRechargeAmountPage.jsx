@@ -51,7 +51,7 @@ const AdminUserRechargeAmountPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-8 mt-10 p-6 bg-gradient-to-b from-indigo-300 via-white to-indigo-300 rounded-xl shadow-2xl w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto transition-all duration-500 transform hover:scale-105">
+    <div className="flex flex-col items-center justify-center gap-8 mt-10 p-6  w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto transition-all duration-500 transform hover:scale-105">
       {isExploding && <ConfettiExplosion />}
 
       <h1 className="text-2xl md:text-3xl font-bold text-center text-indigo-900 mb-4 md:mb-6 tracking-wide">

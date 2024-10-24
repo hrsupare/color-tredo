@@ -3,6 +3,7 @@ import { IoNotifications } from "react-icons/io5";
 import BottomNavBar from "../Components/Navbar/BottomNavBar";
 import { BASE_URL } from "../../constant";
 import axios from "axios";
+import UserPaymentHistory from "./UserPaymentHistory";
 
 const Balance = () => {
   const [showNotification, setShowNotification] = useState(false);
@@ -10,8 +11,9 @@ const Balance = () => {
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userData, setUserData] = useState([]);
-  const [loading, setLoading] = useState(false); // New loading state
-  const [error, setError] = useState(""); // State for error message
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -215,6 +217,11 @@ const Balance = () => {
           </div>
         </div>
       )}
+
+      <div>
+        <UserPaymentHistory/>
+      </div>
+      
       <BottomNavBar />
     </div>
   );
