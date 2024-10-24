@@ -218,9 +218,9 @@ const Balance = () => {
         </div>
       )}
 
-      <div>
+    
         <UserPaymentHistory/>
-      </div>
+     
       
       <BottomNavBar />
     </div>
