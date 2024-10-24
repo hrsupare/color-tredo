@@ -111,7 +111,7 @@ const TableComponent = ({ data }) => (
         <table className="w-full table-auto border border-gray-300 rounded-lg overflow-hidden shadow-lg">
             <thead className="bg-black text-white w-full">
                 <tr>
-                    <th className="py-3 text-left px-4">ID</th>
+                    <th className="py-3 text-left px-4">Sender ID</th>
                     <th className="py-3 text-left px-4">Amount</th>
                     <th className="py-3 text-left px-4">Date</th>
                 </tr>
