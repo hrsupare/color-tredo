@@ -14,16 +14,14 @@ const UserPaymentHistory = () => {
     const [withdrawData, setWithdrawData] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Fetch recharge and withdraw data on component mount
     useEffect(() => {
-        const referenceId = localStorage.getItem("referenceId"); // Example of getting referenceId from localStorage
+        const referenceId = localStorage.getItem("referenceId");
         if (referenceId) {
             fetchRechargeData(referenceId);
             fetchWithdrawData(referenceId);
         }
     }, []);
 
-    // Fetch Recharge Data
     const fetchRechargeData = async (referenceId) => {
         try {
             const response = await axios.get(`https://cpa.up.railway.app/userGame/getRecharge?referanceId=${referenceId}`);
@@ -40,13 +38,12 @@ const UserPaymentHistory = () => {
         }
     };
 
-    // Fetch Withdraw Data
     const fetchWithdrawData = async (referenceId) => {
         try {
             const response = await axios.get(`https://cpa.up.railway.app/userGame/getWithdraw?referanceId=${referenceId}`);
             if (response.data && response.data.message === "success") {
                 const formattedData = response.data.object.map((transaction) => ({
-                    id: transaction.rechargeSenderId, // Assuming withdraw has same structure, adjust as needed
+                    id: transaction.rechargeSenderId, 
                     amount: `₹${transaction.transactionAmount}`,
                     date: new Date(transaction.withdrawTransactionsDateAndTime).toLocaleString(),
                 }));
@@ -55,41 +52,40 @@ const UserPaymentHistory = () => {
         } catch (error) {
             console.error("Error fetching withdraw data:", error);
         } finally {
-            setLoading(false); // Stop loading once both API calls are done
+            setLoading(false);
         }
     };
 
     return (
-        <div className="flex flex-col justify-start gap-2 p-4 max-w-lg mx-auto w-full md:p-6 transition-all duration-500">
-            <h1 className="text-lg md:text-xl font-semibold text-black pl-4 md:pl-6 justify-start">
+        <div className="flex flex-col justify-start gap-2 p-2 max-w-full mx-auto w-full transition-all duration-500">
+            <h1 className="text-xl font-semibold text-black pl-6 justify-start">
                 Payment History
             </h1>
 
             {/* Tabs */}
-            <Tabs value="recharge" className="w-full">
-                <TabsHeader className="bg-white rounded-lg shadow mb-4">
+            <Tabs value="recharge" className="w-full max-w-full">
+                <TabsHeader className="relative flex justify-center items-center p-2 w-full max-w-full">
                     <Tab
                         key="recharge"
                         value="recharge"
-                        className="flex items-center gap-2 font-medium text-black rounded-lg py-2 px-3 md:py-3 md:px-4 flex-grow text-center"
+                        className="flex items-center gap-2 font-medium text-black rounded-lg py-3 px-4 flex-grow text-center"
                     >
-                        <Square3Stack3DIcon className="w-5 h-5 md:w-6 md:h-6" />
+                        <Square3Stack3DIcon className="w-6 h-6" />
                         Recharge
                     </Tab>
                     <Tab
                         key="withdraw"
                         value="withdraw"
-                        className="flex items-center gap-2 font-medium text-black rounded-lg py-2 px-3 md:py-3 md:px-4 flex-grow text-center"
+                        className="flex items-center gap-2 font-medium text-black rounded-lg py-3 px-4 flex-grow text-center"
                     >
-                        <UserCircleIcon className="w-5 h-5 md:w-6 md:h-6" />
+                        <UserCircleIcon className="w-6 h-6" />
                         Withdraw
                     </Tab>
                 </TabsHeader>
 
                 {/* Tab Content */}
                 <TabsBody>
-                    {/* Recharge Tab */}
-                    <TabPanel key="recharge" value="recharge" className="p-2 md:p-4">
+                    <TabPanel key="recharge" value="recharge" className="p-4">
                         {loading ? (
                             <p>Loading...</p>
                         ) : (
@@ -97,8 +93,7 @@ const UserPaymentHistory = () => {
                         )}
                     </TabPanel>
 
-                    {/* Withdraw Tab */}
-                    <TabPanel key="withdraw" value="withdraw" className="p-2 md:p-4">
+                    <TabPanel key="withdraw" value="withdraw" className="p-4">
                         {loading ? (
                             <p>Loading...</p>
                         ) : (
@@ -111,40 +106,37 @@ const UserPaymentHistory = () => {
     );
 };
 
-// Table Component to display data
 const TableComponent = ({ data }) => (
-    <div className="overflow-x-auto">
-        <table className="w-full table-auto border mb-4 border-gray-300 rounded-lg shadow-lg">
-            <thead className="bg-black text-white">
-                <tr>
-                    <th className="py-2 md:py-3 text-left px-2 md:px-4">ID</th>
-                    <th className="py-2 md:py-3 text-left px-2 md:px-4">Amount</th>
-                    <th className="py-2 md:py-3 text-left px-2 md:px-4">Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {data.length > 0 ? (
-                    data.map((item, index) => (
-                        <tr
-                            key={index}
-                            className={`border-b text-gray-900 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                                } hover:bg-gray-100 transition duration-200`}
-                        >
-                            <td className="py-2 md:py-3 text-left px-4 font-semibold">{item.id}</td>
-                            <td className="py-2 md:py-3 text-left px-4 font-semibold">{item.amount}</td>
-                            <td className="py-2 md:py-3 text-left px-4 font-semibold">{item.date}</td>
-                        </tr>
-                    ))
-                ) : (
-                    <tr>
-                        <td colSpan="3" className="text-center py-4">
-                            No records found.
-                        </td>
+    <table className="w-full table-auto border mb-4  border-gray-300 rounded-lg overflow-hidden shadow-lg max-w-full">
+        <thead className="bg-black text-white w-full">
+            <tr>
+                <th className="py-3 text-left px-4">ID</th>
+                <th className="py-3 text-left px-4">Amount</th>
+                <th className="py-3 text-left px-4">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {data.length > 0 ? (
+                data.map((item, index) => (
+                    <tr
+                        key={index}
+                        className={`border-b text-gray-900 ${index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                            } hover:bg-gray-100 transition duration-200`}
+                    >
+                        <td className="py-2 text-left px-6 font-semibold">{item.id}</td>
+                        <td className="py-2 text-left px-6 font-semibold">{item.amount}</td>
+                        <td className="py-2 text-left px-6 font-semibold">{item.date}</td>
                     </tr>
-                )}
-            </tbody>
-        </table>
-    </div>
+                ))
+            ) : (
+                <tr>
+                    <td colSpan="3" className="text-center py-4">
+                        No records found.
+                    </td>
+                </tr>
+            )}
+        </tbody>
+    </table>
 );
 
 export default UserPaymentHistory;
