@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaUser, FaUserAlt } from "react-icons/fa";
-import NumberInputForm from "../../forms/NumberInputForm";
+import {   FaUserAlt } from "react-icons/fa"; 
 import ButtonUI from "../../ui/ButtonUI";
 import { Input } from "@material-tailwind/react";
 import { BASE_URL } from "../../../constant";
@@ -22,8 +21,38 @@ const AdminWithdraw = () => {
   const loggedInUserId = localStorage.getItem("referenceId");
   const [amount, setAmount] = useState(0);
   const [statusMessage, setStatusMessage] = useState(""); // State for status message
+  const [sendwithdrawForAdminsideDataId, setSendwithdrawForAdminsideDataId] = useState({
+    localDateTime: "",
+    message: "",
+    object: ""
+  });
+  const [currectTime, setCurrentTime] = useState(null)
+  const [isOpen, setIsOpen] = useState(false);
 
+  const toggleModal = () => {
+    setIsOpen(!isOpen);
+  };
+  const handleRedirect = () => {
+    setIsOpen(false); // Close the modal
+    navigate("/paymenthistory"); // Redirect to another page (change "/success" to your desired route)
+  };
 
+  useEffect(() => {
+    let timer;
+  
+    const fetchStatus = async () => {
+      if (currectTime !== null) {
+        await getStatusAfterWithdrawProceed();
+        setCurrentTime(null);
+      }
+    };
+  
+    fetchStatus(); // Call the async function
+  
+    return () => {
+      clearInterval(timer); // Cleanup the timer on unmount
+    };
+  }, [currectTime]);
 
   const handleVerifySender = async () => {
     setErrorMessage("");
@@ -42,35 +71,36 @@ const AdminWithdraw = () => {
         setIsVerified(false);
       }
     } catch (error) {
-      setErrorMessage("No data found for the provided User ID");
+      setErrorMessage("No data found for the provided User ID.");
       setIsVerified(false);
     }
   };
 
   const sendwithdrawForAdminside = async () => {
     const URL = `${BASE_URL}admin/withdrawForAdminside?postUserId=${loggedInUserId}&getUserId=${userId}&amount=${amount}`;
-    const callWithdraw = await axios.patch(URL);
-    console.log(callWithdraw.data, "DEBUG@313 ::::::::: callWithdraw");
+    try {
+      const response = await axios.patch(URL);
+      const data = await response.data;
+
+      if (data) {
+         setSendwithdrawForAdminsideDataId(data.object); // Ensure this state is set properly
+      } else {
+        console.error('Unexpected response structure:', data);
+      }
+    } catch (error) {
+      console.error('Error sending withdrawal request:', error);
+      alert('An error occurred while sending the withdrawal request. Please try again later.');
+    }
   };
 
   const getStatusAfterWithdrawProceed = async () => {
-    const now = new Date();
-
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0"); // Months are 0-based
-    const day = String(now.getDate()).padStart(2, "0");
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
-
-    // Combine to form the desired format
-    const localDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-    const URL = `${BASE_URL}admin/getStatusAfterWithdawProcced?User_R_Id=${userId}&localDateTime=${localDateTime}`;
-    
-    try {
+     const transactionId = sendwithdrawForAdminsideDataId.object; // Store the object to use later
+    const URL = `${BASE_URL}admin/getStatusAfterWithdawProcced?User_R_Id=${userId}&transactionIdGenerator=${transactionId}`;
+     try {
       const response = await axios.get(URL);
       if (response.data.message === "success") {
         setStatusMessage("Withdrawal was successful.");
+        toggleModal()
       } else {
         setStatusMessage("Withdrawal failed: " + response.data.message);
       }
@@ -79,25 +109,34 @@ const AdminWithdraw = () => {
     }
   };
 
-  const handleNext = () => {
-    sendwithdrawForAdminside();
+  const handleNext = async () => {
+    if (isProcessing) return; // Prevent multiple calls
     setIsProcessing(true); // Start processing
-    setTimeRemaining(20); // Reset timer to 2 minutes
+    setTimeRemaining(30); // Reset timer to 30 seconds
 
+    try {
+      await sendwithdrawForAdminside(); // Call your async function here
+    } catch (error) {
+      console.error("Error during withdrawal process:", error);
+      setIsProcessing(false); // Reset processing state if async call fails
+      return; // Exit if there's an error
+    }
+
+    // Ensure that getStatusAfterWithdrawProceed is called after the state is updated
     const timer = setInterval(() => {
       setTimeRemaining((prev) => {
         if (prev <= 1) {
-
           clearInterval(timer); // Clear timer when it reaches 0
           setIsProcessing(false); // Reset processing state
-getStatusAfterWithdrawProceed()
-          // navigate("/superadmin/withdraw/confirm");
+          setCurrentTime(new Date())
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
   };
+
+
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {
@@ -137,9 +176,8 @@ getStatusAfterWithdrawProceed()
           name="userId"
           value={userId}
           onChange={(e) => setUserId(e.target.value)} // Update state on input change
-          className={`mb-4 w-full border ${
-            errorMessage ? "border-red-500" : "border-gray-300"
-          } rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500`}
+          className={`mb-4 w-full border ${errorMessage ? "border-red-500" : "border-gray-300"
+            } rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 placeholder-gray-500`}
           placeholder="e.g., U12345"
         />
 
@@ -249,7 +287,7 @@ getStatusAfterWithdrawProceed()
           </div>
         </div>
       )}
-  {/* Status Message */}
+      {/* Status Message */}
       {statusMessage && (
         <div className="mt-4 p-4 text-center text-lg font-semibold text-indigo-700">
           {statusMessage}
@@ -262,6 +300,29 @@ getStatusAfterWithdrawProceed()
           <div className="text-white text-2xl font-semibold">
             Processing... {Math.floor(timeRemaining / 60)}:
             {String(timeRemaining % 60).padStart(2, "0")}
+          </div>
+        </div>
+      )}
+      
+      
+
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out">
+          {/* Modal Content */}
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xs mx-4 transform transition-all duration-300 scale-95">
+            <h2 className="text-2xl font-bold mb-2 text-green-600">Success!</h2>
+            <p className="text-gray-700 mb-4">
+              Your withdrawal has been successfully processed.
+            </p>
+
+            <div className="flex justify-center">
+              <button
+                onClick={handleRedirect}
+                className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-600 transition duration-300"
+              >
+                OK
+              </button>
+            </div>
           </div>
         </div>
       )}

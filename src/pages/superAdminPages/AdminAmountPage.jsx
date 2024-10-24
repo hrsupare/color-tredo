@@ -31,14 +31,12 @@ const AdminAmountPage = () => {
           },
         }
       );
-      console.log(proceedRecharge.data, "proceedRecharge");
-      
+       
       if (!isExploding) {
         setIsExploding(true);
       }
   
-      // Add a 2-second delay before navigating
-      setTimeout(() => {
+       setTimeout(() => {
         nav("/superadmin");
         setIsExploding(false);
       }, 2000); // 2000 milliseconds = 2 seconds

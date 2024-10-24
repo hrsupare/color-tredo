@@ -14,18 +14,15 @@ const AdminPage = () => {
 
    useEffect(() => {
     if (!referenceId && localStorage.getItem("role") === "ADMIN" && localStorage.getItem("referenceId")) {
-      console.log("SUPERADMIN SPOTTED");
-
+ 
       const getSuperAdminData = async () => {
         try {
           const URL = `${BASE_URL}admin/getByReferenceId?referenceId=${localStorage.getItem("referenceId")}`;
-          console.log(URL, "URL");
-
+ 
           const response = await axios.get(URL);
 
 
-        console.log(response.data, "response.data")
-          if (response.data) {
+           if (response.data) {
             // Update state with fetched data
             setReferenceId(response.data.object.referenceId);
             setName(response.data.object.name);

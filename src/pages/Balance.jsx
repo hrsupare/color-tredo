@@ -193,7 +193,7 @@ const Balance = () => {
                 {selectedNotification.rechargeSenderId}
               </p>
               <p>
-                <strong>Transaction Amount:</strong> ₹
+                <strong>Transaction Amount:</strong> ₹ 
                 {selectedNotification.transactionAmount}
               </p>
               {error && (

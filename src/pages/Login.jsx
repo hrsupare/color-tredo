@@ -64,13 +64,11 @@ const Login = () => {
         return;
       }
       const decoded = jwtDecode(token);
-      console.log(decoded, "DEBUG@313 ::::::::::::; decoded");
-      const response = await axios.get(
+       const response = await axios.get(
         `${BASE_URL}userGame/getByUserId?userID=${decoded.userId}`
       );
       const data = await response.data;
-      console.log(data, "data :::: data : data ");
-      localStorage.setItem("authToken", token);
+       localStorage.setItem("authToken", token);
       localStorage.setItem("referenceId", data.object.referenceId);
       localStorage.setItem("userId", decoded.userId);
       localStorage.setItem("role", decoded.roles);

@@ -14,10 +14,7 @@ const AdminUserRechargeAmountPage = () => {
   const { userId, name } = location.state || {};
   const [amount, setAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
-  const loggedInUserId = localStorage.getItem("referenceId");
-  console.log(loggedInUserId, "DEBUG@313 ::::::: loggedInUserId");
-  console.log(userId, "DEBUG@313 ::::::: userId");
-  console.log(amount, "DEBUG@313 ::::::: amount");
+  const loggedInUserId = localStorage.getItem("referenceId"); 
   const handleRecharge = async () => {
     try {
       setErrorMessage("");
