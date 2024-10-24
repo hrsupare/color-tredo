@@ -108,7 +108,7 @@ const UserPaymentHistory = () => {
 
 const TableComponent = ({ data }) => (
     <div className="overflow-x-auto">
-        <table className="min-w-full table-auto border mb-4 border-gray-300 rounded-lg overflow-hidden shadow-lg">
+        <table className="w-full table-auto border border-gray-300 rounded-lg overflow-hidden shadow-lg">
             <thead className="bg-black text-white w-full">
                 <tr>
                     <th className="py-3 text-left px-4">ID</th>
