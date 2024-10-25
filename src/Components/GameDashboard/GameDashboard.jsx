@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import CountdownTimer from "../CountDown/CountDownTimer";
+import React, { useState, useEffect } from "react"; 
 import { Badge } from "@material-tailwind/react";
 
 const GameDashboard = () => {
@@ -10,6 +9,15 @@ const GameDashboard = () => {
   const [contractMoney, setContractMoney] = useState(10);
   const [midNumber, setMidNumber] = useState(1);
   const [countdownSeconds, setCountdownSeconds] = useState(0);
+ 
+  useEffect(() => {
+    // This will only run when remainingSec is 10
+    if (countdownSeconds === 10) {
+      setPopupVisible(false);
+      setSelectedNumber(null);
+    }
+  }, [countdownSeconds]);   
+
 
   const handleButtonClick = (color) => {
     if (countdownSeconds > 10) {
@@ -20,7 +28,7 @@ const GameDashboard = () => {
 
   const handleClosePopup = () => {
     setPopupVisible(false);
-    setSelectedNumber(null); 
+    setSelectedNumber(null);
   };
 
   const handleOutsideClick = (e) => {
@@ -78,7 +86,7 @@ const GameDashboard = () => {
     switch (number) {
       case 0:
       case 5:
-        return `linear-gradient(to right, red 50%, #f1c232 50%)`;
+        return `linear-gradient(to right, red 90%, #f1c232 50%)`;
       case 1:
       case 4:
       case 7:
@@ -104,7 +112,15 @@ const GameDashboard = () => {
   };
 
   const decreaseMidNumber = (value) => {
-    setMidNumber(prev => Math.max(1, prev - value)); 
+    const decNumber = midNumber - value
+    console.log(decNumber, "decNumber")
+    if (value === 5 && decNumber <= 0) {
+      return
+
+    }
+
+    setMidNumber(prev => Math.max(1, prev - value));
+
   };
 
   useEffect(() => {
@@ -210,21 +226,21 @@ const GameDashboard = () => {
       {isPopupVisible && (
         <div
           id="popup-overlay"
-          className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50"
+          className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-60"
           onClick={handleOutsideClick}
         >
-          <div className="p-4 bg-white shadow-md rounded-lg w-[90%] max-w-xl mx-auto sm:p-6">
-            <h2 className="font-bold text-lg mb-3 text-center">
+          <div className="p-4 bg-white shadow-lg rounded-2xl w-[95%] max-w-sm mx-auto sm:w-full sm:max-w-md sm:p-6 transition-all transform ease-in-out">
+            <h2 className="font-semibold text-xl mb-4 text-center text-gray-800">
               {selectedNumber !== null ? `Join ${selectedNumber}` : buttonColor}
             </h2>
 
-            <p className="text-sm">Contract Money</p>
-            <div className="flex space-x-1 mb-3">
+            <p className="text-base font-medium text-gray-700">Contract Money</p>
+            <div className="flex space-x-1 mb-4">
               {[10, 100, 1000].map((value) => (
                 <button
                   key={value}
-                  className={`flex-1 py-1 text-sm rounded-md ${contractMoney === value ? "bg-pink-400" : "bg-gray-200"
-                    }`}
+                  className={`flex-1 py-2 text-sm rounded-lg transition-all duration-200 ${contractMoney === value ? "bg-pink-400 text-white" : "bg-gray-200 text-gray-700"
+                    } hover:bg-pink-300 hover:text-white`}
                   onClick={() => setContractMoney(value)}
                 >
                   {value}
@@ -232,39 +248,58 @@ const GameDashboard = () => {
               ))}
             </div>
 
-            <p className="text-sm">Numbers</p>
-            <div className="flex justify-between mb-2">
-              <div className="flex space-x-1">
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => decreaseMidNumber(5)}>
+            <p className="text-sm text-gray-700 font-medium mb-1">Numbers</p>
+            <div className="flex justify-between items-center mb-3">
+              <div className="flex space-x-2">
+                <button
+                  className="bg-gray-200 rounded-lg py-1 w-12 text-sm hover:bg-gray-300"
+                  onClick={() => decreaseMidNumber(5)}
+                >
                   -5
                 </button>
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => decreaseMidNumber(1)}>
+                <button
+                  className="bg-gray-200 rounded-lg py-1 w-12 text-sm hover:bg-gray-300"
+                  onClick={() => decreaseMidNumber(1)}
+                >
                   -1
                 </button>
               </div>
 
-              <div className="text-3xl font-bold">{midNumber}</div>
+              <div className="text-3xl font-bold text-gray-800">{midNumber}</div>
 
-              <div className="flex space-x-1">
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => increaseMidNumber(1)}>
+              <div className="flex space-x-2">
+                <button
+                  className="bg-gray-200 rounded-lg py-1 w-12 text-sm hover:bg-gray-300"
+                  onClick={() => increaseMidNumber(1)}
+                >
                   +1
                 </button>
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => increaseMidNumber(5)}>
+                <button
+                  className="bg-gray-200 rounded-lg py-1 w-12 text-sm hover:bg-gray-300"
+                  onClick={() => increaseMidNumber(5)}
+                >
                   +5
                 </button>
               </div>
             </div>
 
-            <p className="text-sm">Total Contract money is {totalContractMoney}</p>
+            <p className="text-base text-gray-700 font-medium mb-6">
+              Total Contract money is{" "}
+              <span className="font-bold text-indigo-500 text-lg">{totalContractMoney}</span>
+            </p>
 
-            <div className="flex justify-end mt-3">
-              <button className="bg-green-500 text-white text-sm rounded-md px-4 py-2 h-[2.5rem]" onClick={handleClosePopup}>
+            <div className="flex justify-center mt-4">
+              <button
+                className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-200 text-white text-sm rounded-lg px-6 py-2 h-[2.5rem] shadow-md transition-all duration-200"
+                onClick={handleClosePopup}
+              >
                 Confirm
               </button>
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 };
