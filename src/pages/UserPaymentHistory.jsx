@@ -7,55 +7,58 @@ import {
     Tab,
     TabPanel,
 } from "@material-tailwind/react";
-import { Square3Stack3DIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { Square3Stack3DIcon, UserCircleIcon, ArrowPathIcon } from "@heroicons/react/24/solid";
 
 const UserPaymentHistory = () => {
     const [rechargeData, setRechargeData] = useState([]);
     const [withdrawData, setWithdrawData] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    const fetchData = () => {
         const referenceId = localStorage.getItem("referenceId");
         if (referenceId) {
             fetchRechargeData(referenceId);
             fetchWithdrawData(referenceId);
         }
-    }, []);
+    };
+
+    useEffect(fetchData, []);
 
     const fetchRechargeData = async (referenceId) => {
         try {
             const response = await axios.get(`https://cpa.up.railway.app/userGame/getRecharge?referanceId=${referenceId}`);
             if (response.data && response.data.message === "success") {
-                const transformData = []
-
-                const formattedData = response.data.object.map((transaction) => {
-                    transformData.unshift({
-                        id: transaction.rechargeSenderId,
-                        amount: `₹ ${transaction.transactionAmount}`,
-                        date: convertToIST12HourFormat(transaction.rechargeTransactionsDateAndTime),
-
-                    })
-                });
+                const transformData = response.data.object.map((transaction) => ({
+                    id: transaction.rechargeSenderId,
+                    amount: `₹ ${transaction.transactionAmount}`,
+                    date: convertToIST12HourFormat(transaction.rechargeTransactionsDateAndTime),
+                    originalDate: new Date(transaction.rechargeTransactionsDateAndTime)  // Preserve original date for sorting
+                }));
+    
+                // Sort data by date in descending order
+                transformData.sort((a, b) => b.originalDate - a.originalDate);
+                
                 setRechargeData(transformData);
             }
         } catch (error) {
             console.error("Error fetching recharge data:", error);
         }
     };
-
+    
     const fetchWithdrawData = async (referenceId) => {
         try {
             const response = await axios.get(`https://cpa.up.railway.app/userGame/getWithdraw?referanceId=${referenceId}`);
             if (response.data && response.data.message === "success") {
-                const transformData = []
-
-                const formattedData = response.data.object.map((transaction) => {
-                    transformData.unshift({
-                        id: transaction.rechargeSenderId,
-                        amount: `₹ ${transaction.transactionAmount}`,
-                        date: convertToIST12HourFormat(transaction.withdrawTransactionsDateAndTime),
-                    })
-                });
+                const transformData = response.data.object.map((transaction) => ({
+                    id: transaction.rechargeSenderId,
+                    amount: `₹ ${transaction.transactionAmount}`,
+                    date: convertToIST12HourFormat(transaction.withdrawTransactionsDateAndTime),
+                    originalDate: new Date(transaction.withdrawTransactionsDateAndTime)  // Preserve original date for sorting
+                }));
+    
+                // Sort data by date in descending order
+                transformData.sort((a, b) => b.originalDate - a.originalDate);
+    
                 setWithdrawData(transformData);
             }
         } catch (error) {
@@ -64,14 +67,24 @@ const UserPaymentHistory = () => {
             setLoading(false);
         }
     };
+    
+
+    const handleRefresh = () => {
+        setLoading(true);
+        fetchData();
+    };
 
     return (
         <div className="flex flex-col justify-start gap-2 p-2 max-w-full mx-auto w-full transition-all duration-500">
-            <h1 className="text-xl font-semibold text-black pl-6 justify-start">
-                Payment History
-            </h1>
+            <div className="flex items-center justify-between pl-6">
+                <h1 className="text-xl font-semibold text-black">
+                    Payment History
+                </h1>
+                <button onClick={handleRefresh} className="text-black p-1 rounded-full hover:bg-gray-200">
+                    <ArrowPathIcon className="w-6 h-6" />
+                </button>
+            </div>
 
-            {/* Tabs */}
             <Tabs value="recharge" className="w-full max-w-full">
                 <TabsHeader className="relative flex justify-center items-center p-2 w-full max-w-full">
                     <Tab
@@ -92,7 +105,6 @@ const UserPaymentHistory = () => {
                     </Tab>
                 </TabsHeader>
 
-                {/* Tab Content */}
                 <TabsBody>
                     <TabPanel key="recharge" value="recharge" className="p-2">
                         {loading ? (
@@ -151,36 +163,21 @@ const TableComponent = ({ data }) => (
 );
 
 export function convertToIST12HourFormat(isoDate) {
-    // Step 1: Parse the ISO date string into a Date object
     let date = new Date(isoDate);
-
-    // Step 2: Convert to IST by adding 5 hours and 30 minutes
-    let istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
+    let istOffset = 5.5 * 60 * 60 * 1000;
     let istDate = new Date(date.getTime() + istOffset);
-
-    // Step 3: Extract date components (day, month, year)
     let day = istDate.getDate();
-    let month = istDate.getMonth() + 1; // Months are 0-based in JavaScript
+    let month = istDate.getMonth() + 1;
     let year = istDate.getFullYear();
-
-    // Format day and month to always have 2 digits (e.g., 01, 09)
     let formattedDay = day < 10 ? '0' + day : day;
     let formattedMonth = month < 10 ? '0' + month : month;
-
-    // Step 4: Format time to 12-hour clock
     let hours = istDate.getHours();
     let minutes = istDate.getMinutes();
     let seconds = istDate.getSeconds();
-
     let ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // Adjust for 12-hour format
-
-    // Add leading zero to minutes and seconds if needed
+    hours = hours % 12 || 12;
     let formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
     let formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
-
-    // Return the formatted date and time
     return `${formattedDay}-${formattedMonth}-${year} ${hours}:${formattedMinutes}:${formattedSeconds} ${ampm}`;
 }
 
