@@ -135,65 +135,64 @@ const GameDashboard = () => {
       </div>
 
       {isPopupVisible && (
-        <div
-          id="popup-overlay"
-          className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50"
-          onClick={handleOutsideClick}
-        >
-          <div className="p-4 bg-white shadow-md rounded-lg w-[25%] max-w-xl mx-auto sm:p-6">
-            <h2 className="font-bold text-lg mb-3 text-center">
-              {selectedNumber !== null ? `Join ${selectedNumber}` : buttonColor}
-            </h2>
+  <div
+    id="popup-overlay"
+    className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50"
+    onClick={handleOutsideClick}
+  >
+    <div className="p-4 bg-white shadow-md rounded-lg w-[90%] max-w-xl mx-auto sm:p-6">
+      <h2 className="font-bold text-lg mb-3 text-center">
+        {selectedNumber !== null ? `Join ${selectedNumber}` : buttonColor}
+      </h2>
 
-            <p className="text-sm">Contract Money</p>
-            <div className="flex space-x-1 mb-3">
-              {[10, 100, 1000].map((value) => (
-                <button
-                  key={value}
-                  className={`flex-1 py-1 text-sm rounded-md ${contractMoney === value ? "bg-pink-400" : "bg-gray-200"
-                    }`}
-                  onClick={() => setContractMoney(value)}
-                >
-                  {value}
-                </button>
-              ))}
-            </div>
+      <p className="text-sm">Contract Money</p>
+      <div className="flex space-x-1 mb-3">
+        {[10, 100, 1000].map((value) => (
+          <button
+            key={value}
+            className={`flex-1 py-1 text-sm rounded-md ${contractMoney === value ? "bg-pink-400" : "bg-gray-200"
+              }`}
+            onClick={() => setContractMoney(value)}
+          >
+            {value}
+          </button>
+        ))}
+      </div>
 
-            <p className="text-sm">Numbers</p>
-            <div className="flex justify-between mb-2">
-              <div className="flex space-x-1">
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(-5)}>
-                  -5
-                </button>
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(-1)}>
-                  -1
-                </button>
-              </div>
-
-              <div className="text-3xl font-bold">{totalContractMoney}</div>
-
-              <div className="flex space-x-1">
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(1)}>
-                  +1
-                </button>
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(5)}>
-                  +5
-                </button>
-              </div>
-            </div>
-
-            <p className="text-sm">Total Contract money is {totalContractMoney}</p>
-
-            <div className="flex justify-end mt-3">
-              <button className="bg-green-500 text-white text-sm rounded-md px-4 py-2 h-[2.5rem]" onClick={handleClosePopup}>
-                Confirm
-              </button>
-            </div>
-          </div>
+      <p className="text-sm">Numbers</p>
+      <div className="flex justify-between mb-2">
+        <div className="flex space-x-1">
+          <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(-5)}>
+            -5
+          </button>
+          <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(-1)}>
+            -1
+          </button>
         </div>
 
+        <div className="text-3xl font-bold">{totalContractMoney}</div>
 
-      )}
+        <div className="flex space-x-1">
+          <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(1)}>
+            +1
+          </button>
+          <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(5)}>
+            +5
+          </button>
+        </div>
+      </div>
+
+      <p className="text-sm">Total Contract money is {totalContractMoney}</p>
+
+      <div className="flex justify-end mt-3">
+        <button className="bg-green-500 text-white text-sm rounded-md px-4 py-2 h-[2.5rem]" onClick={handleClosePopup}>
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
