@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import CountdownTimer from "../CountDown/CountDownTimer";
+import { Badge } from "@material-tailwind/react";
 
 const GameDashboard = () => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [buttonColor, setButtonColor] = useState("");
-  const [inputValue, setInputValue] = useState("");
-  const [totalContractMoney, setTotalContractMoney] = useState(10); // Initialize with the default total
+  const [totalContractMoney, setTotalContractMoney] = useState(1); 
+  const [selectedNumber, setSelectedNumber] = useState(null);
+  const [contractMoney, setContractMoney] = useState(10); 
+  const [midNumber, setMidNumber] = useState(1); 
 
   const handleButtonClick = (color) => {
     setButtonColor(color);
@@ -14,6 +17,7 @@ const GameDashboard = () => {
 
   const handleClosePopup = () => {
     setPopupVisible(false);
+    setSelectedNumber(null); // Close selected number popup as well
   };
 
   const handleOutsideClick = (e) => {
@@ -22,9 +26,37 @@ const GameDashboard = () => {
     }
   };
 
-  // Function to update total contract money
+  const handleBadgeClick = (number) => {
+    setSelectedNumber(number);
+    setPopupVisible(true);
+    setTotalContractMoney(1); // Reset to 1 when a new number is selected
+  };
+
   const updateTotalContractMoney = (amount) => {
-    setTotalContractMoney((prevTotal) => prevTotal + amount);
+    const newMidNumber = midNumber + amount;
+    setMidNumber(newMidNumber >= 1 ? newMidNumber : midNumber); // Ensure midNumber never goes below 1
+    setTotalContractMoney(contractMoney * (newMidNumber >= 1 ? newMidNumber : midNumber)); // Update total
+  };
+
+  const badgeBackgroundStyles = (number) => {
+    switch (number) {
+      case 0:
+      case 5:
+        return `linear-gradient(to right, red 50%, #f1c232 50%)`;
+      case 1:
+      case 4:
+      case 7:
+        return `bg-yellow-700`;
+      case 2:
+      case 8:
+        return `bg-red-600`;
+      case 3:
+      case 6:
+      case 9:
+        return `bg-black text-white`;
+      default:
+        return ``;
+    }
   };
 
   return (
@@ -41,17 +73,14 @@ const GameDashboard = () => {
       </div>
 
       <div className="flex justify-center items-center gap-3 mt-3 sm:mt-5">
-        {/* Red Button */}
         <div className="flex-1">
           <button
-            className="bg-gradient-to-r from-red-600 to-red-400 w-full h-[2.5rem] rounded-md shadow-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg focus:ring-2 focus:ring-red-400"
+            className="bg-gradient-to-r from-red-600 to-red-400 w-full h-[2.5rem] rounded-md shadow-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
             onClick={() => handleButtonClick("Join Red")}
           >
             <span className="text-white font-semibold text-sm sm:text-md">Join Red</span>
           </button>
         </div>
-
-        {/* Yellow Button */}
         <div className="flex-1">
           <button
             className="bg-gradient-to-r from-yellow-600 to-yellow-400 w-full h-[2.5rem] rounded-md shadow-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
@@ -60,8 +89,6 @@ const GameDashboard = () => {
             <span className="text-white font-semibold text-sm sm:text-md">Join Yellow</span>
           </button>
         </div>
-
-        {/* Black Button */}
         <div className="flex-1">
           <button
             className="bg-black w-full h-[2.5rem] rounded-md shadow-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
@@ -72,68 +99,85 @@ const GameDashboard = () => {
         </div>
       </div>
 
-      {/* Popup Component */}
+      {/* Number Selection Section */}
+      <div className="mt-6 font-extrabold text-lg sm:text-xl w-full text-center p-1 text-gray-1000">
+        Select the Number
+      </div>
+
+      <div className="flex justify-between p-2 sm:p-5 gap-3 mx-4 sm:mx-6">
+        {[...Array(5)].map((_, index) => (
+          <button
+            key={index}
+            onClick={() => handleBadgeClick(index)}
+            className="focus:outline-none transform hover:scale-105 transition-transform duration-200"
+          >
+            <Badge
+              className={`h-8 w-8 sm:h-10 sm:w-10 text-xs sm:text-sm font-bold ${badgeBackgroundStyles(index)}`}
+              content={index}
+            />
+          </button>
+        ))}
+      </div>
+
+      <div className="flex justify-between mt-4 sm:mt-6 gap-3 p-2 sm:p-5 mx-4 sm:mx-6">
+        {[5, 6, 7, 8, 9].map((number) => (
+          <button
+            key={number}
+            onClick={() => handleBadgeClick(number)}
+            className="focus:outline-none transform hover:scale-105 transition-transform duration-200"
+          >
+            <Badge
+              className={`h-8 w-8 sm:h-10 sm:w-10 text-xs sm:text-sm font-bold ${badgeBackgroundStyles(number)}`}
+              content={number}
+            />
+          </button>
+        ))}
+      </div>
+
       {isPopupVisible && (
         <div
           id="popup-overlay"
           className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50"
           onClick={handleOutsideClick}
         >
-          <div className="p-4 bg-white shadow-md rounded-lg max-w-sm mx-auto sm:max-w-md sm:p-6">
-            <h2 className="font-bold text-lg mb-3 text-center">{buttonColor}</h2>
+          <div className="p-4 bg-white shadow-md rounded-lg max-w-md sm:max-w-lg mx-auto sm:p-6">
+            <h2 className="font-bold text-lg mb-3 text-center">
+              {selectedNumber !== null ? `Join ${selectedNumber}` : buttonColor}
+            </h2>
 
-            {/* Input Field with Submit Button inside */}
-            <div className="flex mb-3">
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="0"
-                className="flex-1 border border-gray-300 rounded-l-md px-3 py-2 h-[2.5rem] text-sm"
-              />
-              <button className="bg-blue-500 text-white rounded-r-md px-3 h-[2.5rem]">Recharge</button>
-            </div>
-
-            {/* Buttons Below Input Field in one line */}
             <p className="text-sm">Contract Money</p>
             <div className="flex space-x-1 mb-3">
-              <button className="flex-1 bg-gray-200 rounded-md py-1 text-sm">10</button>
-              <button className="flex-1 bg-gray-200 rounded-md py-1 text-sm">100</button>
-              <button className="flex-1 bg-gray-200 rounded-md py-1 text-sm">1000</button>
-              <button className="flex-1 bg-gray-200 rounded-md py-1 text-sm">10000</button>
+              {[10, 100, 1000].map((value) => (
+                <button
+                  key={value}
+                  className={`flex-1 py-1 text-sm rounded-md ${
+                    contractMoney === value ? "bg-pink-400" : "bg-gray-200"
+                  }`}
+                  onClick={() => setContractMoney(value)}
+                >
+                  {value}
+                </button>
+              ))}
             </div>
 
             <p className="text-sm">Numbers</p>
             <div className="flex justify-between mb-2">
               <div className="flex space-x-1">
-                <button 
-                  className="bg-gray-200 rounded-md py-1 w-10 text-sm" 
-                  onClick={() => updateTotalContractMoney(-5)} // Subtract 5
-                >
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(-5)}>
                   -5
                 </button>
-                <button 
-                  className="bg-gray-200 rounded-md py-1 w-10 text-sm" 
-                  onClick={() => updateTotalContractMoney(-1)} // Subtract 1
-                >
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(-1)}>
                   -1
                 </button>
               </div>
 
-              {/* Displaying total contract money */}
               <div className="text-3xl font-bold">{totalContractMoney}</div>
 
               <div className="flex space-x-1">
-                <button 
-                  className="bg-gray-200 rounded-md py-1 w-10 text-sm" 
-                  onClick={() => updateTotalContractMoney(1)} // Add 1
-                >
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(1)}>
                   +1
                 </button>
-                <button 
-                  className="bg-gray-200 rounded-md py-1 w-10 text-sm" 
-                  onClick={() => updateTotalContractMoney(5)} // Add 5
-                >
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(5)}>
                   +5
                 </button>
               </div>
@@ -141,12 +185,8 @@ const GameDashboard = () => {
 
             <p className="text-sm">Total Contract money is {totalContractMoney}</p>
 
-            {/* Confirm Button */}
             <div className="flex justify-end mt-3">
-              <button
-                className="bg-green-500 text-white text-sm rounded-md px-4 py-2 h-[2.5rem]"
-                onClick={handleClosePopup}
-              >
+              <button className="bg-green-500 text-white text-sm rounded-md px-4 py-2 h-[2.5rem]" onClick={handleClosePopup}>
                 Confirm
               </button>
             </div>

@@ -23,7 +23,7 @@ const Home = () => {
           <NavbarDefault />
         </header>
       <GameDashboard />
-      <NumberComponent />
+      {/* <NumberComponent /> */}
       <OrderTabs />
       <BottomNavBar />  
     </div>
