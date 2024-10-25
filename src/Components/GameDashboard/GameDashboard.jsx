@@ -236,7 +236,7 @@ const GameDashboard = () => {
                 </button>
               </div>
 
-              <div className="text-3xl font-bold">{totalContractMoney}</div>
+              <div className="text-3xl font-bold">{midNumber}</div>
 
               <div className="flex space-x-1">
                 <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(1)}>
