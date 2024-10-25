@@ -5,10 +5,10 @@ import { Badge } from "@material-tailwind/react";
 const GameDashboard = () => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [buttonColor, setButtonColor] = useState("");
-  const [totalContractMoney, setTotalContractMoney] = useState(1); 
+  const [totalContractMoney, setTotalContractMoney] = useState(1);
   const [selectedNumber, setSelectedNumber] = useState(null);
-  const [contractMoney, setContractMoney] = useState(10); 
-  const [midNumber, setMidNumber] = useState(1); 
+  const [contractMoney, setContractMoney] = useState(10);
+  const [midNumber, setMidNumber] = useState(1);
 
   const handleButtonClick = (color) => {
     setButtonColor(color);
@@ -140,7 +140,7 @@ const GameDashboard = () => {
           className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50"
           onClick={handleOutsideClick}
         >
-          <div className="p-4 bg-white shadow-md rounded-lg max-w-md sm:max-w-lg mx-auto sm:p-6">
+          <div className="p-4 bg-white shadow-md rounded-lg w-[25%] max-w-xl mx-auto sm:p-6">
             <h2 className="font-bold text-lg mb-3 text-center">
               {selectedNumber !== null ? `Join ${selectedNumber}` : buttonColor}
             </h2>
@@ -150,9 +150,8 @@ const GameDashboard = () => {
               {[10, 100, 1000].map((value) => (
                 <button
                   key={value}
-                  className={`flex-1 py-1 text-sm rounded-md ${
-                    contractMoney === value ? "bg-pink-400" : "bg-gray-200"
-                  }`}
+                  className={`flex-1 py-1 text-sm rounded-md ${contractMoney === value ? "bg-pink-400" : "bg-gray-200"
+                    }`}
                   onClick={() => setContractMoney(value)}
                 >
                   {value}
@@ -192,6 +191,8 @@ const GameDashboard = () => {
             </div>
           </div>
         </div>
+
+
       )}
     </div>
   );
