@@ -5,7 +5,7 @@ import { Badge } from "@material-tailwind/react";
 const GameDashboard = () => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [buttonColor, setButtonColor] = useState("");
-  const [totalContractMoney, setTotalContractMoney] = useState(1);
+  const [totalContractMoney, setTotalContractMoney] = useState(0);
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [contractMoney, setContractMoney] = useState(10);
   const [midNumber, setMidNumber] = useState(1);
@@ -20,7 +20,7 @@ const GameDashboard = () => {
 
   const handleClosePopup = () => {
     setPopupVisible(false);
-    setSelectedNumber(null); // Close selected number popup as well
+    setSelectedNumber(null); 
   };
 
   const handleOutsideClick = (e) => {
@@ -37,11 +37,6 @@ const GameDashboard = () => {
     }
   };
 
-  const updateTotalContractMoney = (amount) => {
-    const newMidNumber = midNumber + amount;
-    setMidNumber(newMidNumber >= 1 ? newMidNumber : midNumber); // Ensure midNumber never goes below 1
-    setTotalContractMoney(contractMoney * (newMidNumber >= 1 ? newMidNumber : midNumber)); // Update total
-  };
 
   useEffect(() => {
     const savedStartTime = localStorage.getItem('startTime');
@@ -103,6 +98,18 @@ const GameDashboard = () => {
 
   // Check if buttons should be disabled
   const isDisabled = countdownSeconds <= 10;
+
+  const increaseMidNumber = (value) => {
+    setMidNumber(prev => prev + value);
+  };
+
+  const decreaseMidNumber = (value) => {
+    setMidNumber(prev => Math.max(1, prev - value)); 
+  };
+
+  useEffect(() => {
+    setTotalContractMoney(contractMoney * midNumber);
+  }, [contractMoney, midNumber]);
 
   return (
     <div className="p-3 bg-white shadow-md rounded-lg font-serif max-w-md mx-auto sm:max-w-lg lg:max-w-xl sm:p-6 lg:p-8">
@@ -228,10 +235,10 @@ const GameDashboard = () => {
             <p className="text-sm">Numbers</p>
             <div className="flex justify-between mb-2">
               <div className="flex space-x-1">
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(-5)}>
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => decreaseMidNumber(5)}>
                   -5
                 </button>
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(-1)}>
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => decreaseMidNumber(1)}>
                   -1
                 </button>
               </div>
@@ -239,10 +246,10 @@ const GameDashboard = () => {
               <div className="text-3xl font-bold">{midNumber}</div>
 
               <div className="flex space-x-1">
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(1)}>
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => increaseMidNumber(1)}>
                   +1
                 </button>
-                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => updateTotalContractMoney(5)}>
+                <button className="bg-gray-200 rounded-md py-1 w-10 text-sm" onClick={() => increaseMidNumber(5)}>
                   +5
                 </button>
               </div>
