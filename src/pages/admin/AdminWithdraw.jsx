@@ -17,6 +17,7 @@ const AdminWithdraw = () => {
     name: "",
     email: "",
     mobileNo: "",
+    totalBalnce:"",
   });
   const loggedInUserId = localStorage.getItem("referenceId");
   const [amount, setAmount] = useState(0);
@@ -33,8 +34,8 @@ const AdminWithdraw = () => {
     setIsOpen(!isOpen);
   };
   const handleRedirect = () => {
-    setIsOpen(false); // Close the modal
-    navigate("/paymenthistory"); // Redirect to another page (change "/success" to your desired route)
+    setIsOpen(false); 
+    navigate("/paymenthistory"); 
   };
 
   useEffect(() => {
@@ -78,12 +79,14 @@ const AdminWithdraw = () => {
 
   const sendwithdrawForAdminside = async () => {
     const URL = `${BASE_URL}admin/withdrawForAdminside?postUserId=${loggedInUserId}&getUserId=${userId}&amount=${amount}`;
+    console.log(URL, );
+    
     try {
       const response = await axios.patch(URL);
       const data = await response.data;
 
       if (data) {
-         setSendwithdrawForAdminsideDataId(data.object); // Ensure this state is set properly
+         setSendwithdrawForAdminsideDataId(data.object); 
       } else {
         console.error('Unexpected response structure:', data);
       }
@@ -247,12 +250,19 @@ const AdminWithdraw = () => {
               {userData.mobileNo || "N/A"}
             </p>
           </div>
+          <div className="flex items-center mb-3">
+            <FaUserAlt className="text-indigo-500 text-xl mr-3" />
+            <p className="text-sm font-semibold text-gray-800">
+              <span className="text-indigo-600">Balance:</span>{" "}
+              {userData.totalBalnce || "N/A"}/-
+            </p>
+          </div>
         </div>
       )}
 
       {/* Show Withdrawal Amount only after verification */}
       {isVerified && (
-        <div className="w-full space-y-4 mt-6">
+        <div className="w-full space-y-4 mt-4">
           <div className="flex items-center border border-gray-700 rounded-lg mb-4 w-full shadow-sm hover:shadow-lg transition-shadow duration-300">
             <span className="text-2xl font-bold text-gray-800 px-4 py-2 bg-gray-300 rounded-l-lg">
               ₹
