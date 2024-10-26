@@ -64,7 +64,7 @@ const SuperAdmin = () => {
             Super Admin ID:{" "}
             <span className="font-semibold text-blue-600"> {referenceId}</span>
           </p>
-          <p className="text-lg text-gray-800">
+          <p className="text-lg text-gray-800 ml-4">
             Total:
             <span className="font-semibold text-blue-600">
               ₹ {totalBalance}
