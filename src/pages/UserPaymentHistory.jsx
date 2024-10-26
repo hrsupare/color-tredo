@@ -49,6 +49,7 @@ const UserPaymentHistory = () => {
         try {
             const response = await axios.get(`https://cpa.up.railway.app/userGame/getWithdraw?referanceId=${referenceId}`);
             if (response.data && response.data.message === "success") {
+                   console.log(response.data.object, "DEBUG@313 :::::::; response.data.object")
                 const transformData = response.data.object.map((transaction) => ({
                     id: transaction.rechargeSenderId,
                     amount: `₹ ${transaction.transactionAmount}`,
