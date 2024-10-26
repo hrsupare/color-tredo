@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {   FaUserAlt } from "react-icons/fa"; 
+import { FaUserAlt } from "react-icons/fa";
 import ButtonUI from "../../ui/ButtonUI";
 import { Input } from "@material-tailwind/react";
 import { BASE_URL } from "../../../constant";
@@ -17,7 +17,7 @@ const AdminWithdraw = () => {
     name: "",
     email: "",
     mobileNo: "",
-    totalBalnce:"",
+    totalBalnce: "",
   });
   const loggedInUserId = localStorage.getItem("referenceId");
   const [amount, setAmount] = useState(0);
@@ -34,22 +34,22 @@ const AdminWithdraw = () => {
     setIsOpen(!isOpen);
   };
   const handleRedirect = () => {
-    setIsOpen(false); 
-    navigate("/paymenthistory"); 
+    setIsOpen(false);
+    navigate("/paymenthistory");
   };
 
   useEffect(() => {
     let timer;
-  
+
     const fetchStatus = async () => {
       if (currectTime !== null) {
         await getStatusAfterWithdrawProceed();
         setCurrentTime(null);
       }
     };
-  
+
     fetchStatus(); // Call the async function
-  
+
     return () => {
       clearInterval(timer); // Cleanup the timer on unmount
     };
@@ -79,14 +79,14 @@ const AdminWithdraw = () => {
 
   const sendwithdrawForAdminside = async () => {
     const URL = `${BASE_URL}admin/withdrawForAdminside?postUserId=${loggedInUserId}&getUserId=${userId}&amount=${amount}`;
-    console.log(URL, );
-    
+    console.log(URL,);
+
     try {
       const response = await axios.patch(URL);
       const data = await response.data;
 
       if (data) {
-         setSendwithdrawForAdminsideDataId(data.object); 
+        setSendwithdrawForAdminsideDataId(data.object);
       } else {
         console.error('Unexpected response structure:', data);
       }
@@ -97,9 +97,9 @@ const AdminWithdraw = () => {
   };
 
   const getStatusAfterWithdrawProceed = async () => {
-     const transactionId = sendwithdrawForAdminsideDataId.object; // Store the object to use later
+    const transactionId = sendwithdrawForAdminsideDataId.object; // Store the object to use later
     const URL = `${BASE_URL}admin/getStatusAfterWithdawProcced?User_R_Id=${userId}&transactionIdGenerator=${transactionId}`;
-     try {
+    try {
       const response = await axios.get(URL);
       if (response.data.message === "success") {
         setStatusMessage("Withdrawal was successful.");
@@ -113,31 +113,39 @@ const AdminWithdraw = () => {
   };
 
   const handleNext = async () => {
-    if (isProcessing) return; // Prevent multiple calls
-    setIsProcessing(true); // Start processing
-    setTimeRemaining(30); // Reset timer to 30 seconds
-
+    if (isProcessing) return; 
+    setIsProcessing(true); 
+    setTimeRemaining(30); 
+  
+    
+    if (amount > userData.totalBalnce) {
+      alert("Insufficient balance.");
+      setIsProcessing(false); 
+      return; 
+    }
+  
     try {
-      await sendwithdrawForAdminside(); // Call your async function here
+      await sendwithdrawForAdminside(); 
     } catch (error) {
       console.error("Error during withdrawal process:", error);
-      setIsProcessing(false); // Reset processing state if async call fails
-      return; // Exit if there's an error
+      setIsProcessing(false); 
+      return;
     }
-
+  
     // Ensure that getStatusAfterWithdrawProceed is called after the state is updated
     const timer = setInterval(() => {
       setTimeRemaining((prev) => {
         if (prev <= 1) {
           clearInterval(timer); // Clear timer when it reaches 0
           setIsProcessing(false); // Reset processing state
-          setCurrentTime(new Date())
+          setCurrentTime(new Date());
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
   };
+  
 
 
 
@@ -313,8 +321,8 @@ const AdminWithdraw = () => {
           </div>
         </div>
       )}
-      
-      
+
+
 
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out">

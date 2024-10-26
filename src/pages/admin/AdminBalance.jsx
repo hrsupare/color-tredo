@@ -113,7 +113,7 @@ const AdminBalance = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center gap-2 p-2 max-w-2xl mx-auto w-full transition-all duration-500">
+        <div className="flex flex-col items-center justify-center gap-2 p-2 max-w-xl mx-auto w-full transition-all duration-500">
             <div className="relative flex justify-center items-center p-2 w-full">
                 <div className="bg-white w-full max-w-2xl rounded-lg shadow-lg p-6 relative md:px-8 md:py-10">
                     <IoNotifications
