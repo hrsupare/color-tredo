@@ -65,14 +65,13 @@ const GameDashboard = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  // Calculate minutes and seconds from countdownSeconds
+  
   const minutes = Math.floor(countdownSeconds / 60);
   const seconds = countdownSeconds % 60;
 
   const badgeBackgroundStyles = (number) => {
-    // Change badge color to gray when countdownSeconds is 10 or less
     if (countdownSeconds <= 10) {
-      return `bg-gray-300 cursor-not-allowed`; // Gray color for disabled state
+      return `bg-gray-300 cursor-not-allowed`; 
     }
 
     switch (number) {

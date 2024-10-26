@@ -1,9 +1,11 @@
 import ButtonUI from "../../ui/ButtonUI";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaBolt, FaUser, FaHistory, FaMinusCircle, FaSignOutAlt } from "react-icons/fa"; // Icons for buttons
+import { FaBolt, FaUser, FaHistory, FaMinusCircle, FaSignOutAlt,   } from "react-icons/fa"; 
+import { MdAccountBalanceWallet } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { BASE_URL } from "../../../constant";
 import axios from "axios";
+import AdminBalance from "./AdminBalance";
 
 const AdminPage = () => {
   const navigate = useNavigate();
@@ -12,17 +14,17 @@ const AdminPage = () => {
   const [name, setName] = useState(location.state?.name || "");
   const [totalBalance, setTotalBalance] = useState(location.state?.totalBalance || 0);
 
-   useEffect(() => {
+  useEffect(() => {
     if (!referenceId && localStorage.getItem("role") === "ADMIN" && localStorage.getItem("referenceId")) {
- 
+
       const getSuperAdminData = async () => {
         try {
           const URL = `${BASE_URL}admin/getByReferenceId?referenceId=${localStorage.getItem("referenceId")}`;
- 
+
           const response = await axios.get(URL);
 
 
-           if (response.data) {
+          if (response.data) {
             // Update state with fetched data
             setReferenceId(response.data.object.referenceId);
             setName(response.data.object.name);
@@ -52,17 +54,17 @@ const AdminPage = () => {
         Hello {name}
       </h1>
       <div className="flex flex-col items-center mb-10 p-6 bg-white rounded-lg shadow-md">
-          <p className="text-lg text-gray-800">
-            Super Admin ID:{" "}
-            <span className="font-semibold text-blue-600"> {referenceId}</span>
-          </p>
-          <p className="text-lg text-gray-800">
-            Total: 
-            <span className="font-semibold text-blue-600">
-              ₹ {totalBalance}
-            </span>
-          </p>
-        </div>
+        <p className="text-lg text-gray-800">
+          Super Admin ID:{" "}
+          <span className="font-semibold text-blue-600"> {referenceId}</span>
+        </p>
+        <p className="text-lg text-gray-800">
+          Total:
+          <span className="font-semibold text-blue-600">
+            ₹ {totalBalance}
+          </span>
+        </p>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         {/* Uncomment to enable the Recharge ADMIN button */}
@@ -75,8 +77,8 @@ const AdminPage = () => {
           </div>
         </ButtonUI> */}
 
-        <ButtonUI 
-          onClick={() => navigate("/admin/user/1")} 
+        <ButtonUI
+          onClick={() => navigate("/admin/user/1")}
           className="flex items-center justify-center py-5 text-xl bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white transition duration-300 rounded-lg shadow-lg transform hover:scale-105">
           <div className="flex items-center justify-center">
             <FaUser className="h-8 w-8 mr-3 transition duration-300 transform hover:scale-110" />
@@ -84,8 +86,8 @@ const AdminPage = () => {
           </div>
         </ButtonUI>
 
-        <ButtonUI 
-          onClick={() => navigate("/paymenthistory")} 
+        <ButtonUI
+          onClick={() => navigate("/paymenthistory")}
           className="flex items-center justify-center py-5 text-xl bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white transition duration-300 rounded-lg shadow-lg transform hover:scale-105">
           <div className="flex items-center justify-center">
             <FaHistory className="h-8 w-8 mr-3 transition duration-300 transform hover:scale-110" />
@@ -93,12 +95,21 @@ const AdminPage = () => {
           </div>
         </ButtonUI>
 
-        <ButtonUI 
-          onClick={() => navigate("/admin/withdraw")} 
+        <ButtonUI
+          onClick={() => navigate("/admin/withdraw")}
           className="flex items-center justify-center py-5 text-xl bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white transition duration-300 rounded-lg shadow-lg transform hover:scale-105">
           <div className="flex items-center justify-center">
             <FaMinusCircle className="h-8 w-8 mr-3 transition duration-300 transform hover:scale-110" />
             <span className="font-medium">Withdraw</span>
+          </div>
+        </ButtonUI>
+
+        <ButtonUI
+          onClick={() => navigate("/admin/balance")}
+          className="flex items-center justify-center py-5 text-xl bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white transition duration-300 rounded-lg shadow-lg transform hover:scale-105">
+          <div className="flex items-center justify-center">
+            <MdAccountBalanceWallet  className="h-8 w-8 mr-3 transition duration-300 transform hover:scale-110" />
+            <span className="font-medium">Balance</span>
           </div>
         </ButtonUI>
       </div>
@@ -107,9 +118,9 @@ const AdminPage = () => {
         <p className="text-gray-600 text-center text-lg">Manage your admin actions with ease and efficiency.</p>
       </div>
 
-       <div className="flex justify-end mt-6">
-        <ButtonUI 
-          onClick={handleSignOut} 
+      <div className="flex justify-end mt-6">
+        <ButtonUI
+          onClick={handleSignOut}
           className="px-8 py-3 text-lg bg-red-600 hover:bg-red-700 text-white rounded-full shadow-lg transition duration-300 transform hover:scale-105 flex items-center">
           <FaSignOutAlt className="h-5 w-5 mr-2" />
           Sign Out
