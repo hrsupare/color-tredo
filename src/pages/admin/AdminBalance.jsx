@@ -37,7 +37,7 @@ const AdminBalance = () => {
 
         const apiUrl = `${BASE_URL}admin/userNotificationList?getUserId=${localStorage.getItem("referenceId")}`;
 
-        setLoading(true); // Start loading before fetch
+        setLoading(true); 
         try {
             const response = await fetch(apiUrl);
             if (response.ok) {
@@ -109,14 +109,13 @@ const AdminBalance = () => {
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedNotification(null);
-        setError(""); // Clear error on modal close
+        setError(""); 
     };
 
-
     return (
-        <div className="flex flex-col items-center justify-center gap-2 p-2 max-w-lg mx-auto w-full transition-all duration-500">
+        <div className="flex flex-col items-center justify-center gap-2 p-2 max-w-2xl mx-auto w-full transition-all duration-500">
             <div className="relative flex justify-center items-center p-2 w-full">
-                <div className="bg-white w-full max-w-lg rounded-lg shadow-lg p-6 relative">
+                <div className="bg-white w-full max-w-2xl rounded-lg shadow-lg p-6 relative md:px-8 md:py-10">
                     <IoNotifications
                         className="absolute top-4 right-4 text-2xl text-black cursor-pointer"
                         onClick={handleNotification}
@@ -134,7 +133,7 @@ const AdminBalance = () => {
 
             {showNotification && (
                 <div className="relative flex justify-center items-center p-2 w-full">
-                    <div className="bg-white w-full max-w-lg rounded-lg shadow-lg p-4 relative">
+                    <div className="bg-white w-full max-w-2xl rounded-lg shadow-lg p-4 relative md:px-8">
                         <div className="flex items-center justify-between">
                             <p className="text-xl font-semibold text-black pl-2">
                                 Notifications

@@ -217,11 +217,7 @@ const Balance = () => {
           </div>
         </div>
       )}
-
-    
-        <UserPaymentHistory/>
-     
-      
+        <UserPaymentHistory/> 
       <BottomNavBar />
     </div>
   );

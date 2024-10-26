@@ -6,6 +6,7 @@ import {
   FaHistory,
   FaPlusCircle,
   FaSignOutAlt,
+  FaMinusCircle
 } from "react-icons/fa";
 import { BASE_URL } from "../../../constant";
 import axios from "axios";
@@ -20,13 +21,13 @@ const SuperAdmin = () => {
 
   useEffect(() => {
     if (!referenceId && localStorage.getItem("role") === "SUPERADMIN" && localStorage.getItem("referenceId")) {
- 
+
       const getSuperAdminData = async () => {
         try {
           const URL = `${BASE_URL}admin/getByReferenceId?referenceId=${localStorage.getItem("referenceId")}`;
- 
+
           const response = await axios.get(URL);
-           if (response.data) {
+          if (response.data) {
             // Update state with fetched data
             setReferenceId(response.data.object.referenceId);
             setName(response.data.object.name);
@@ -111,7 +112,27 @@ const SuperAdmin = () => {
               <span className="font-semibold">Create Admin</span>
             </div>
           </ButtonUI>
+
+          <ButtonUI
+            onClick={() => navigate("/admin/withdraw")}
+            className="flex items-center justify-between p-5 text-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white transition duration-300 rounded-lg shadow-md transform hover:scale-105">
+            <div className="flex items-center justify-center">
+              <FaMinusCircle className="h-6 w-6 mr-3" />
+              <span className="font-semibold">Withdraw</span>
+            </div>
+          </ButtonUI>
+
+          <ButtonUI
+            onClick={handleSignOut}
+            className="flex items-center justify-between p-5 text-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white transition duration-300 rounded-lg shadow-md transform hover:scale-105">
+            <div className="flex items-center justify-center">
+              <FaSignOutAlt className="h-6 w-6 mr-3" />
+              <span className="font-semibold">Sign Out</span>
+            </div>
+          </ButtonUI>
         </div>
+        
+
 
         <p className="text-center text-gray-700 mt-6 text-md">
           Use the buttons above to manage admin accounts, view history, and
@@ -120,13 +141,13 @@ const SuperAdmin = () => {
 
         {/* Logout Button positioned at the bottom right of the card */}
         <div className="flex justify-end mt-4">
-          <ButtonUI
+          {/* <ButtonUI
             onClick={handleSignOut}
             className="px-8 py-3 text-lg bg-red-600 hover:bg-red-700 text-white rounded-full shadow-lg transition duration-300 transform hover:scale-105 flex items-center"
           >
             <FaSignOutAlt className="h-5 w-5 mr-2" />
             Sign Out
-          </ButtonUI>
+          </ButtonUI> */}
         </div>
       </div>
     </div>
