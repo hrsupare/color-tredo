@@ -116,7 +116,7 @@ const SuperAdmin = () => {
           <ButtonUI
             onClick={() => navigate("/admin/withdraw")}
             className="flex items-center justify-between p-5 text-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white transition duration-300 rounded-lg shadow-md transform hover:scale-105">
-            <div className="flex items-center justify-center">
+            <div className="flex items-start justify-start">
               <FaMinusCircle className="h-6 w-6 mr-3" />
               <span className="font-semibold">Withdraw</span>
             </div>
@@ -125,7 +125,7 @@ const SuperAdmin = () => {
           <ButtonUI
             onClick={handleSignOut}
             className="flex items-center justify-between p-5 text-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white transition duration-300 rounded-lg shadow-md transform hover:scale-105">
-            <div className="flex items-center justify-center">
+            <div className="flex items-start justify-start">
               <FaSignOutAlt className="h-6 w-6 mr-3" />
               <span className="font-semibold">Sign Out</span>
             </div>
