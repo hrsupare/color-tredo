@@ -37,7 +37,7 @@ const AdminBalance = () => {
 
         const apiUrl = `${BASE_URL}admin/userNotificationList?getUserId=${localStorage.getItem("referenceId")}`;
 
-        setLoading(true); 
+        setLoading(true);
         try {
             const response = await fetch(apiUrl);
             if (response.ok) {
@@ -109,7 +109,7 @@ const AdminBalance = () => {
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedNotification(null);
-        setError(""); 
+        setError("");
     };
 
     return (
@@ -121,8 +121,9 @@ const AdminBalance = () => {
                         onClick={handleNotification}
                     />
                     <div className="flex items-center justify-between mt-2">
-                        <p className="text-xl font-bold text-gray-800">My Balance</p>
-                    </div>
+                        <p className="text-xl font-bold text-gray-800">
+                            My Balance&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {/* Add as many &nbsp; as needed */}
+                        </p>                    </div>
                     <div className="flex items-center justify-between mt-2">
                         <p className="text-4xl font-bold text-gray-800">
                             ₹ {userData.totalBalnce}
