@@ -188,7 +188,7 @@ const GameDashboard = () => {
     fetchLatestPeriod()
     fetchLatestResults()
     fetchRechargeData()
-    const savedStartTime = localStorage.getItem('startTime');
+    const savedStartTime =  '1730032243'
     if (savedStartTime) {
       const elapsedSeconds = Math.floor((Date.now() - parseInt(savedStartTime)) / 1000);
       const remainingSeconds = Math.max(0, 120 - (elapsedSeconds % 120));
