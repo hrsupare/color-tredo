@@ -227,7 +227,7 @@ const GameDashboard = () => {
     switch (number) {
       case 0:
       case 5:
-        return `linear-gradient(to right, red 90%, #f1c232 50%)`;
+        return `bg-half-black-red text-white`;
       case 1:
       case 4:
       case 7:
@@ -338,7 +338,7 @@ const GameDashboard = () => {
             key={index}
             onClick={() => handleBadgeClick(index)}
             className={`focus:outline-none transform hover:scale-105 transition-transform duration-200 
-        ${isDisabled ? "cursor-not-allowed" : ""}`} // Add cursor-not-allowed when disabled
+        ${isDisabled ? "cursor-not-allowed" : ""}`} 
             disabled={isDisabled}
           >
             <Badge

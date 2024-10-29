@@ -1,4 +1,5 @@
 const withMT = require("@material-tailwind/react/utils/withMT");
+const colors = require('tailwindcss/colors');
 
 
  
@@ -8,7 +9,11 @@ module.exports = withMT({
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'half-black-red': `linear-gradient(to right, black 50%, ${colors.red[600]} 50%)`,
+      },
+    },
   },
   plugins: [],
 });
