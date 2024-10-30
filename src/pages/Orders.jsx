@@ -20,7 +20,7 @@ const Orders = () => {
             if (isLiveOrders) {
                 fetchLiveOrders();
             } else {
-                fetchPastOrders();
+                fetchPastOrders()
             }
         }
     }, [isLiveOrders, loggedInUserId]);
@@ -56,16 +56,51 @@ const Orders = () => {
             setLoading(false);
         }
     };
+   
 
-    const getTrueNumbers = (item) => {
-        const numbers = [];
-        for (let i = 1; i <= 9; i++) {
-            if (item[i.toString()]) {
-                numbers.push(i);
-            }
-        }
-        return numbers.length > 0 ? numbers : ["N"];
+
+
+    const getTrueNumberWord = (item) => {
+        const numberWords = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+        const trueNumber = numberWords.find(word => item[word] === true);
+        const numberMap = {
+            "one": 1,
+            "two": 2,
+            "three": 3,
+            "four": 4,
+            "five": 5,
+            "six": 6,
+            "seven": 7,
+            "eight": 8,
+            "nine": 9
+        };
+        const findNumberFromWord = (word) => {
+            const foundNumber = Object.entries(numberMap)
+                .find(([key]) => key === word);
+        
+            return foundNumber ? foundNumber[1] : "N";
+        };
+        return findNumberFromWord(trueNumber);
     };
+    const getWinStatus  = (item) => {
+        //  console.log(item , "DEBUG@313")
+        const getTrueNumberWords = getTrueNumberWord(item)
+        const colorWords = ["red" , "yellow" , "black"];
+        const trueColor = colorWords.find(word => item[word] === true);
+        let colorCode 
+        if(trueColor==="yellow"){
+            colorCode = 102
+        }
+        if(trueColor==="red"){
+            colorCode = 101
+        }
+        if(trueColor==="black"){
+            colorCode = 103
+        }
+        const bettedEle =  [colorCode  ,getTrueNumberWords]
+        return bettedEle.includes(item['wonNumber']) ? "Win" : "Loss";
+ 
+    }
 
     const getColorBadgeClass = (order) => {
         if (order.red) return "bg-red-600";
@@ -83,17 +118,15 @@ const Orders = () => {
 
                 <div className="flex justify-center mb-3 sm:mb-4">
                     <button
-                        className={`px-2 py-1 sm:px-4 sm:py-2 font-medium rounded-l ${
-                            isLiveOrders ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-700"
-                        }`}
+                        className={`px-2 py-1 sm:px-4 sm:py-2 font-medium rounded-l ${isLiveOrders ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-700"
+                            }`}
                         onClick={() => setIsLiveOrders(true)}
                     >
                         Live Orders
                     </button>
                     <button
-                        className={`px-2 py-1 sm:px-4 sm:py-2 font-medium rounded-r ${
-                            !isLiveOrders ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-700"
-                        }`}
+                        className={`px-2 py-1 sm:px-4 sm:py-2 font-medium rounded-r ${!isLiveOrders ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-700"
+                            }`}
                         onClick={() => setIsLiveOrders(false)}
                     >
                         Past Orders
@@ -124,9 +157,8 @@ const Orders = () => {
                                 {allResults.slice(0).reverse().map((order, index) => (
                                     <tr
                                         key={order.id}
-                                        className={`${
-                                            index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                                        } hover:bg-indigo-50 transition-colors`}
+                                        className={`${index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                                            } hover:bg-indigo-50 transition-colors`}
                                     >
                                         <td className="px-2 sm:px-3 py-2 border-b border-gray-200 text-center text-gray-800">
                                             {order.period}
@@ -135,10 +167,10 @@ const Orders = () => {
                                             {order.amount}
                                         </td>
                                         <td className="px-2 sm:px-3 py-2 border-b border-gray-200 text-center text-gray-800 font-semibold">
-                                            {order.winStatus ? "Won" : "Lost"}
+                                            {getWinStatus(order)}
                                         </td>
                                         <td className="px-2 sm:px-3 py-2 border-b border-gray-200 text-center text-gray-800">
-                                            {getTrueNumbers(order).join(", ")}
+                                            {getTrueNumberWord(order)}
                                         </td>
                                         <td className="px-2 sm:px-3 py-2 border-b border-gray-200 text-center">
                                             <span
