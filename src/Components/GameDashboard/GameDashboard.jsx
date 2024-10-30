@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Badge } from "@material-tailwind/react";
 import { BASE_URL } from "../../../constant";
 import axios from "axios";
-import { Result } from "postcss";
+
 
 const GameDashboard = () => {
   const [isPopupVisible, setPopupVisible] = useState(false);
@@ -11,7 +11,6 @@ const GameDashboard = () => {
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [contractMoney, setContractMoney] = useState(10);
   const [midNumber, setMidNumber] = useState(1);
-  const [countdownSeconds, setCountdownSeconds] = useState(0);
   const [periodNumber, setPeriodNumber] = useState(0)
   const loggedInUserId = localStorage.getItem("referenceId");
   const [allResults, setAllResults] = useState([]);
@@ -19,6 +18,15 @@ const GameDashboard = () => {
   const [error, setError] = useState(null);
   const [totalBalance, setTotalBalance] = useState(location.state?.totalBalance || 0);
   const [insufficientFunds, setInsufficientFunds] = useState(false);
+
+
+  const [counter, setCounter] = useState(null); // Store the counter time
+  const [isSyncing, setIsSyncing] = useState(false); // Show sync status
+  const syncIntervalRef = useRef(10000); // Start sync interval at 10 seconds
+  const driftThreshold = 2; // Maximum allowable drift in seconds
+  const counterRef = useRef(counter); // Use ref to track counter
+
+
 
 
   const getColorClass = (wonColor) => {
@@ -75,34 +83,24 @@ const GameDashboard = () => {
     }
   };
 
-  const handleMakeWinApi = async () => {
-    try {
-      const makeWinApi = `${BASE_URL}makeWinNumber/make`;
-      const makeWinCall = await axios.patch(makeWinApi);
-      console.log(makeWinCall.data, "DEBUG@313 ::::::::::: makeWinCall.data")
-    } catch (error) {
-      console.error('Error fetching the latest period:', error);
-    }
-  };
 
   useEffect(() => {
-    if (countdownSeconds === 10) {
+    if (counter === 30) {
       setPopupVisible(false);
       setSelectedNumber(null);
       setButtonColor("")
-      handleMakeWinApi()
     }
 
-    if (countdownSeconds === 1) {
+    if (counter === 1) {
       fetchLatestPeriod();
       fetchLatestResults()
       fetchRechargeData()
     }
 
-  }, [countdownSeconds]);
+  }, [counter]);
 
   const handleButtonClick = (color) => {
-    if (countdownSeconds > 10) {
+    if (counter > 30) {
       setButtonColor(color);
       setPopupVisible(true);
     }
@@ -170,6 +168,7 @@ const GameDashboard = () => {
     setButtonColor("")
     setInsufficientFunds(false)
   }
+
   const handleOutsideClick = (e) => {
     if (e.target.id === "popup-overlay") {
       handleClosePopup();
@@ -177,50 +176,24 @@ const GameDashboard = () => {
   };
 
   const handleBadgeClick = (number) => {
-    if (countdownSeconds > 10) {
+    if (counter > 30) {
       setSelectedNumber(number);
       setPopupVisible(true);
-      setTotalContractMoney(contractMoney * midNumber); // Reset to 1 when a new number is selected
+      setTotalContractMoney(contractMoney * midNumber); 
     }
   };
-
   useEffect(() => {
     fetchLatestPeriod()
     fetchLatestResults()
     fetchRechargeData()
-    const savedStartTime =  '1730032243'
-    if (savedStartTime) {
-      const elapsedSeconds = Math.floor((Date.now() - parseInt(savedStartTime)) / 1000);
-      const remainingSeconds = Math.max(0, 120 - (elapsedSeconds % 120));
-      setCountdownSeconds(remainingSeconds);
-    } else {
-      setCountdownSeconds(120);
-      localStorage.setItem('startTime', Date.now().toString());
-    }
+  }, [])
+  
 
-    const intervalId = setInterval(() => {
-      setCountdownSeconds(prevSeconds => {
-        const newSeconds = prevSeconds - 1;
-        if (newSeconds <= 0) {
-          // Reset countdown immediately
-          setCountdownSeconds(120);
-          localStorage.setItem('startTime', Date.now().toString());
-          return 120;
-        }
-        return newSeconds;
-      });
-    }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, []);
-
-
-
-  const minutes = Math.floor(countdownSeconds / 60);
-  const seconds = countdownSeconds % 60;
+  const minutes = Math.floor(counter / 60);
+  const seconds = counter % 60;
 
   const badgeBackgroundStyles = (number) => {
-    if (countdownSeconds <= 10) {
+    if (counter <= 30) {
       return `bg-gray-300 cursor-not-allowed`;
     }
 
@@ -245,8 +218,7 @@ const GameDashboard = () => {
   };
 
 
-  // Check if buttons should be disabled
-  const isDisabled = countdownSeconds <= 10;
+   const isDisabled = counter <= 30;
 
   const increaseMidNumber = (value) => {
     setMidNumber(prev => prev + value);
@@ -265,10 +237,91 @@ const GameDashboard = () => {
   };
 
   useEffect(() => {
+
     setTotalContractMoney(contractMoney * midNumber);
   }, [contractMoney, midNumber]);
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+ 
+
+  useEffect(() => {
+    counterRef.current = counter; // Update ref whenever counter changes
+   }, [counter]);
+
+  useEffect(() => {
+     const fetchInitialTime = async () => {
+      try {
+        const startTime = Date.now();
+        const response = await fetch(`${BASE_URL}time/remaining-time`);
+        const data = await response.json();
+        const endTime = Date.now();
+        const latency = Math.floor((endTime - startTime) / 1000 / 2);
+        const adjustedTime = Math.max(data - latency, 0);
+        setCounter(adjustedTime);
+      } catch (error) {
+        console.error("Failed to fetch initial time:", error);
+      }
+    };
+
+    fetchInitialTime();
+
+    // Local countdown timer
+    const countdownInterval = setInterval(() => {
+      setCounter(prevCounter => {
+        if (prevCounter > 0) {
+          return prevCounter - 1;
+        } else {
+          // When it hits zero, fetch the initial time again to restart
+          fetchInitialTime(); // Restart the timer from API value
+          return 0; // Ensure it stays at 0 until new value is set
+        }
+      });
+    }, 1000);
+
+    // Function to sync with server and adjust for drift
+    const syncWithServer = async () => {
+      if (isSyncing || counterRef.current <= 0) return; // Prevent syncing if syncing in progress or counter is 0
+
+      try {
+        setIsSyncing(true);
+        const syncStartTime = Date.now();
+        const response = await fetch(`${BASE_URL}time/remaining-time`);
+        const data = await response.json();
+        const syncEndTime = Date.now();
+
+        // Calculate latency
+        const latency = Math.floor((syncEndTime - syncStartTime) / 1000 / 2);
+        // Adjust the server's counter for latency
+        const serverTime = Math.max(data - latency, 0); // Ensure it's not negative
+
+        // Calculate drift
+        const drift = serverTime - counterRef.current;
+
+        // Correct the counter based on drift
+        if (Math.abs(drift) > driftThreshold) {
+          // Adjust the local counter to match the server time
+          setCounter(serverTime);
+          // Reset sync interval to a lower frequency if drift exceeds threshold
+          syncIntervalRef.current = 10000; // Sync every 10 seconds
+        } else if (syncIntervalRef.current < 60000) {
+          // Increase sync interval progressively if drift is within threshold
+          syncIntervalRef.current += 5000; // Increase by 5 seconds
+        }
+      } catch (error) {
+        console.error("Failed to sync time:", error);
+      } finally {
+        setIsSyncing(false);
+      }
+    };
+
+    // Set interval to periodically sync with server
+    const syncInterval = setInterval(syncWithServer, syncIntervalRef.current);
+
+    // Cleanup intervals on component unmount
+    return () => {
+      clearInterval(countdownInterval);
+      clearInterval(syncInterval);
+    };
+
+  }, [isSyncing]);  
 
   return (
     <div className="p-3 bg-white shadow-md rounded-lg font-serif max-w-md mx-auto sm:max-w-lg lg:max-w-xl sm:p-6 lg:p-8">
@@ -338,7 +391,7 @@ const GameDashboard = () => {
             key={index}
             onClick={() => handleBadgeClick(index)}
             className={`focus:outline-none transform hover:scale-105 transition-transform duration-200 
-        ${isDisabled ? "cursor-not-allowed" : ""}`} 
+        ${isDisabled ? "cursor-not-allowed" : ""}`}
             disabled={isDisabled}
           >
             <Badge
