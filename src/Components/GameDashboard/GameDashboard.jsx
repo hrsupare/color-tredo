@@ -32,8 +32,9 @@ const GameDashboard = () => {
   const getColorClass = (wonColor) => {
     switch (wonColor) {
       case 101:
+        return 'bg-red-600';
       case 102:
-        return 'bg-red-600'; // Red for wonColor 101 and 102
+        return 'bg-yellow-600'; // Red for wonColor 101 and 102
       case 103:
         return 'bg-black'; // Black for wonColor 103
       default:
@@ -144,7 +145,7 @@ const GameDashboard = () => {
 
 
     const joinTheGameColorOrNumberApi = `${BASE_URL}userGame/saveGameColorOrNumber?referenceId=${loggedInUserId}&colorOrNumber=${checkColorOrNumberSelected}&amount=${totalContractMoney}&period=${periodNumber}`
-
+   console.log(joinTheGameColorOrNumberApi, "DEBUG@313 :::::::::::::::; joinTheGameColorOrNumberApi")
 
     try {
       const joinTheGameColorOrNumberApiCall = await axios.post(joinTheGameColorOrNumberApi);

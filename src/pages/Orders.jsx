@@ -35,7 +35,7 @@ const Orders = () => {
         } catch (error) {
             console.error("Error fetching live orders:", error);
             setAllResults([]);
-            setError("Failed to fetch live orders.");
+            setError("Pending Order Not Found");
         } finally {
             setLoading(false);
         }
@@ -45,6 +45,7 @@ const Orders = () => {
         try {
             setLoading(true);
             const pastOrdersUrl = `${BASE_URL}userGame/getOrderByUserRefIdDone?referanceId=${loggedInUserId}`;
+             console.log(pastOrdersUrl, 'DEBUG@313 :::::::::::;; pastOrdersUrl')
             const response = await axios.get(pastOrdersUrl);
             setAllResults(response.data.object);
             setError(null);
@@ -56,7 +57,7 @@ const Orders = () => {
             setLoading(false);
         }
     };
-   
+
 
 
 
@@ -77,29 +78,35 @@ const Orders = () => {
         const findNumberFromWord = (word) => {
             const foundNumber = Object.entries(numberMap)
                 .find(([key]) => key === word);
-        
+
             return foundNumber ? foundNumber[1] : "N";
         };
         return findNumberFromWord(trueNumber);
     };
-    const getWinStatus  = (item) => {
+    const getWinStatus = (item) => {
         //  console.log(item , "DEBUG@313")
         const getTrueNumberWords = getTrueNumberWord(item)
-        const colorWords = ["red" , "yellow" , "black"];
+        const colorWords = ["red", "yellow", "black"];
         const trueColor = colorWords.find(word => item[word] === true);
-        let colorCode 
-        if(trueColor==="yellow"){
+        let colorCode
+        if (trueColor === "yellow") {
             colorCode = 102
         }
-        if(trueColor==="red"){
+        if (trueColor === "red") {
             colorCode = 101
         }
-        if(trueColor==="black"){
+        if (trueColor === "black") {
             colorCode = 103
         }
-        const bettedEle =  [colorCode  ,getTrueNumberWords]
-        return bettedEle.includes(item['wonNumber']) ? "Win" : "Loss";
- 
+        const bettedEle = [colorCode, getTrueNumberWords]
+        let latestStatus;
+        if (isLiveOrders) {
+            latestStatus = "Pending"
+        } else {
+            latestStatus = bettedEle.includes(item['wonNumber']) ? "Win" : "Loss";
+        }
+        return latestStatus
+
     }
 
     const getColorBadgeClass = (order) => {
@@ -113,7 +120,7 @@ const Orders = () => {
         <div className="p-2 sm:p-4 bg-white min-h-screen font-serif">
             <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-4 sm:p-6">
                 <h1 className="text-xl sm:text-2xl font-semibold text-indigo-800 mb-4 sm:mb-6 text-center">
-                    {isLiveOrders ? "Live Orders" : "Past Orders"}
+                    {isLiveOrders ? "Pending Orders" : "Complete Orders"}
                 </h1>
 
                 <div className="flex justify-center mb-3 sm:mb-4">
@@ -122,14 +129,14 @@ const Orders = () => {
                             }`}
                         onClick={() => setIsLiveOrders(true)}
                     >
-                        Live Orders
+                        Pending Orders
                     </button>
                     <button
                         className={`px-2 py-1 sm:px-4 sm:py-2 font-medium rounded-r ${!isLiveOrders ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-700"
                             }`}
                         onClick={() => setIsLiveOrders(false)}
                     >
-                        Past Orders
+                        Complete Orders
                     </button>
                 </div>
 
