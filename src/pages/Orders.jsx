@@ -62,9 +62,10 @@ const Orders = () => {
 
 
     const getTrueNumberWord = (item) => {
-        const numberWords = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+        const numberWords = [ "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
         const trueNumber = numberWords.find(word => item[word] === true);
         const numberMap = {
+            "zero":0 , 
             "one": 1,
             "two": 2,
             "three": 3,
