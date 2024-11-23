@@ -26,7 +26,7 @@ const UserPaymentHistory = () => {
 
     const fetchRechargeData = async (referenceId) => {
         try {
-            const response = await axios.get(`https://cpa.up.railway.app/userGame/getRecharge?referanceId=${referenceId}`);
+            const response = await axios.get(`https://add.opticalarc.in/userGame/getRecharge?referanceId=${referenceId}`);
             if (response.data && response.data.message === "success") {
                 const transformData = response.data.object.map((transaction) => ({
                     id: transaction.rechargeSenderId,
@@ -47,7 +47,7 @@ const UserPaymentHistory = () => {
     
     const fetchWithdrawData = async (referenceId) => {
         try {
-            const response = await axios.get(`https://cpa.up.railway.app/userGame/getWithdraw?referanceId=${referenceId}`);
+            const response = await axios.get(`https://add.opticalarc.in/userGame/getWithdraw?referanceId=${referenceId}`);
             if (response.data && response.data.message === "success") {
                    console.log(response.data.object, "DEBUG@313 :::::::; response.data.object")
                 const transformData = response.data.object.map((transaction) => ({
