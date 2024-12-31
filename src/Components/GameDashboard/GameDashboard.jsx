@@ -10,6 +10,7 @@ const GameDashboard = () => {
   const [totalContractMoney, setTotalContractMoney] = useState(0);
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [contractMoney, setContractMoney] = useState(10);
+  const [selectedImage,  setSelectedImage] = useState("");
   const [midNumber, setMidNumber] = useState(1);
   const [periodNumber, setPeriodNumber] = useState(0)
   const loggedInUserId = localStorage.getItem("referenceId");
@@ -145,7 +146,7 @@ const GameDashboard = () => {
 
 
     const joinTheGameColorOrNumberApi = `${BASE_URL}userGame/saveGameColorOrNumber?referenceId=${loggedInUserId}&colorOrNumber=${checkColorOrNumberSelected}&amount=${totalContractMoney}&period=${periodNumber}`
-   console.log(joinTheGameColorOrNumberApi, "DEBUG@313 :::::::::::::::; joinTheGameColorOrNumberApi")
+    console.log(joinTheGameColorOrNumberApi, "DEBUG@313 :::::::::::::::; joinTheGameColorOrNumberApi")
 
     try {
       const joinTheGameColorOrNumberApiCall = await axios.post(joinTheGameColorOrNumberApi);
@@ -180,15 +181,24 @@ const GameDashboard = () => {
     if (counter > 30) {
       setSelectedNumber(number);
       setPopupVisible(true);
-      setTotalContractMoney(contractMoney * midNumber); 
+      setTotalContractMoney(contractMoney * midNumber);
     }
   };
+
+  const handleImageClick = (index, image) => {
+    if (counter > 30) {
+      console.log(index, 'index')
+      console.log(image, 'image')
+      setPopupVisible(true);
+    }
+  };
+
   useEffect(() => {
     fetchLatestPeriod()
     fetchLatestResults()
     fetchRechargeData()
   }, [])
-  
+
 
   const minutes = Math.floor(counter / 60);
   const seconds = counter % 60;
@@ -219,7 +229,7 @@ const GameDashboard = () => {
   };
 
 
-   const isDisabled = counter <= 30;
+  const isDisabled = counter <= 30;
 
   const increaseMidNumber = (value) => {
     setMidNumber(prev => prev + value);
@@ -241,14 +251,14 @@ const GameDashboard = () => {
 
     setTotalContractMoney(contractMoney * midNumber);
   }, [contractMoney, midNumber]);
- 
+
 
   useEffect(() => {
     counterRef.current = counter; // Update ref whenever counter changes
-   }, [counter]);
+  }, [counter]);
 
   useEffect(() => {
-     const fetchInitialTime = async () => {
+    const fetchInitialTime = async () => {
       try {
         const startTime = Date.now();
         const response = await fetch(`${BASE_URL}time/remaining-time`);
@@ -322,7 +332,12 @@ const GameDashboard = () => {
       clearInterval(syncInterval);
     };
 
-  }, [isSyncing]);  
+  }, [isSyncing]);
+
+  const imageNames = [
+    'cow', 'bucket', 'kite', 'lattu', 'rose', 'butterfly', 'peageon', 'rabbit',
+    'umbrella', 'football', 'sun', 'diya'
+  ];
 
   return (
     <div className="p-3 bg-white shadow-md rounded-lg font-serif max-w-md mx-auto sm:max-w-lg lg:max-w-xl sm:p-6 lg:p-8">
@@ -420,6 +435,32 @@ const GameDashboard = () => {
         ))}
       </div>
 
+      {/* Title for images */}
+      <div className="mt-6 font-extrabold text-lg sm:text-xl w-full text-center p-1 text-gray-1000">
+        Select the Images
+      </div>
+
+      {/* Space for images */}
+      {/* Space for images */}
+      <div className="grid grid-cols-4 gap-3 p-2 sm:gap-3">
+        {[...Array(12)].map((_, index) => (
+          <div
+            key={index}
+            className={`relative w-full h-24 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-lg shadow-lg p-1 ${counter <= 30 ? 'opacity-50 cursor-not-allowed' : '' // Disable if counter is <= 30
+              }`}
+            onClick={() => handleImageClick(index + 1, imageNames[index])} // Send both index and name
+
+          >
+            <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-inner hover:scale-105 transform transition-transform duration-200">
+              <img
+                src={`../assets/${index + 1}.png`} // Path to public folder images
+                alt={`Image ${index + 1}`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        ))}
+      </div>
       {/* =============================================================== */}
 
       <div className="p-3 bg-white rounded-lg shadow-lg">
