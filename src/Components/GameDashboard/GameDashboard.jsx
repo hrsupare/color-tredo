@@ -3,48 +3,46 @@ import { Badge } from "@material-tailwind/react";
 import { BASE_URL } from "../../../constant";
 import axios from "axios";
 
-
 const GameDashboard = () => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [buttonColor, setButtonColor] = useState("");
   const [totalContractMoney, setTotalContractMoney] = useState(0);
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [contractMoney, setContractMoney] = useState(10);
-  const [selectedImage,  setSelectedImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageName, setSelectedImageName] = useState(null);
   const [midNumber, setMidNumber] = useState(1);
-  const [periodNumber, setPeriodNumber] = useState(0)
+  const [periodNumber, setPeriodNumber] = useState(0);
   const loggedInUserId = localStorage.getItem("referenceId");
   const [allResults, setAllResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [totalBalance, setTotalBalance] = useState(location.state?.totalBalance || 0);
+  const [totalBalance, setTotalBalance] = useState(
+    location.state?.totalBalance || 0
+  );
+  const [globalSelected, setGlobalSelected] = useState(null);
+
   const [insufficientFunds, setInsufficientFunds] = useState(false);
-
-
   const [counter, setCounter] = useState(null); // Store the counter time
   const [isSyncing, setIsSyncing] = useState(false); // Show sync status
   const syncIntervalRef = useRef(10000); // Start sync interval at 10 seconds
   const driftThreshold = 2; // Maximum allowable drift in seconds
   const counterRef = useRef(counter); // Use ref to track counter
 
-
-
-
   const getColorClass = (wonColor) => {
     switch (wonColor) {
       case 101:
-        return 'bg-red-600';
+        return "bg-red-600";
       case 102:
-        return 'bg-yellow-600'; // Red for wonColor 101 and 102
+        return "bg-yellow-600"; // Red for wonColor 101 and 102
       case 103:
-        return 'bg-black'; // Black for wonColor 103
+        return "bg-black"; // Black for wonColor 103
       default:
-        return 'bg-gray-300'; // Default color if needed
+        return "bg-gray-300"; // Default color if needed
     }
   };
 
   const fetchRechargeData = async () => {
-
     try {
       const response = await axios.get(
         `${BASE_URL}userGame/getRechargeAdminside?referanceId=${loggedInUserId}`
@@ -60,15 +58,13 @@ const GameDashboard = () => {
     }
   };
 
-
   const fetchLatestPeriod = async () => {
     try {
       const getLatestPeriodUrl = `${BASE_URL}userGame/getLivePeriodNo`;
       const getLatestPeriod = await axios.get(getLatestPeriodUrl);
-      setPeriodNumber(getLatestPeriod.data.object.period)
-
+      setPeriodNumber(getLatestPeriod.data.object.period);
     } catch (error) {
-      console.error('Error fetching the latest period:', error);
+      console.error("Error fetching the latest period:", error);
     }
   };
 
@@ -78,98 +74,118 @@ const GameDashboard = () => {
       const getLatestResults = await axios.get(getLatestResultsUrl);
       setAllResults(getLatestResults.data.object); // Set the fetched results to state
     } catch (error) {
-      console.error('Error fetching the latest period:', error);
-      setError('Failed to fetch latest results.'); // Set error message
+      console.error("Error fetching the latest period:", error);
+      setError("Failed to fetch latest results."); // Set error message
     } finally {
       setLoading(false); // Set loading to false after fetching
     }
   };
 
-
   useEffect(() => {
     if (counter === 30) {
       setPopupVisible(false);
       setSelectedNumber(null);
-      setButtonColor("")
+      setSelectedImage(null);
+      setButtonColor("");
+      setGlobalSelected(null);
     }
 
     if (counter === 1) {
       fetchLatestPeriod();
-      fetchLatestResults()
-      fetchRechargeData()
+      fetchLatestResults();
+      fetchRechargeData();
     }
-
   }, [counter]);
 
   const handleButtonClick = (color) => {
     if (counter > 30) {
       setButtonColor(color);
+      setGlobalSelected(color);
       setPopupVisible(true);
     }
   };
-
+  const imageNames = [
+    { name: "cow", selected: "_1_" },
+    { name: "bucket", selected: "_2_" },
+    { name: "kite", selected: "_3_" },
+    { name: "lattu", selected: "_4_" },
+    { name: "rose", selected: "_5_" },
+    { name: "butterfly", selected: "_6_" },
+    { name: "peageon", selected: "_7_" },
+    { name: "rabbit", selected: "_8_" },
+    { name: "umbrella", selected: "_9_" },
+    { name: "football", selected: "_10_" },
+    { name: "sun", selected: "_11_" },
+    { name: "diya", selected: "_12_" },
+  ];
   const handleConfirmPopup = async () => {
-    setInsufficientFunds(false)
+    setInsufficientFunds(false);
 
     const colorCodes = {
       RED: "_RED_",
       BLACK: "_BLACK_",
       YELLOW: "_YELLOW_",
-    }
+    };
 
     const numberCodes = {
-      "0": "_ZERO_",
-      "1": "_ONE_",
-      "2": "_TWO_",
-      "3": "_THREE_",
-      "4": "_FOUR_",
-      "5": "_FIVE_",
-      "6": "_SIX_",
-      "7": "_SEVEN_",
-      "8": "_EIGHT_",
-      "9": "_NINE_"
+      0: "_ZERO_",
+      1: "_ONE_",
+      2: "_TWO_",
+      3: "_THREE_",
+      4: "_FOUR_",
+      5: "_FIVE_",
+      6: "_SIX_",
+      7: "_SEVEN_",
+      8: "_EIGHT_",
+      9: "_NINE_",
     };
 
     let checkColorOrNumberSelected;
 
     if (buttonColor) {
-      checkColorOrNumberSelected = colorCodes[buttonColor]
-    }
-
-    if (selectedNumber === "0") {
-      console.log("TRIAL DEBUG@313")
+      checkColorOrNumberSelected = colorCodes[buttonColor];
     }
 
     if (selectedNumber !== null) {
-      checkColorOrNumberSelected = numberCodes[selectedNumber]
+      checkColorOrNumberSelected = numberCodes[selectedNumber];
+    }
+
+    if (selectedImage !== null) {
+      checkColorOrNumberSelected = selectedImage;
     }
 
 
-    const joinTheGameColorOrNumberApi = `${BASE_URL}userGame/saveGameColorOrNumber?referenceId=${loggedInUserId}&colorOrNumber=${checkColorOrNumberSelected}&amount=${totalContractMoney}&period=${periodNumber}`
-    console.log(joinTheGameColorOrNumberApi, "DEBUG@313 :::::::::::::::; joinTheGameColorOrNumberApi")
+    const joinTheGameColorOrNumberApi = `${BASE_URL}userGame/saveGameColorOrNumber?referenceId=${loggedInUserId}&colorOrNumber=${checkColorOrNumberSelected}&amount=${totalContractMoney}&period=${periodNumber}`;
+
+    
 
     try {
-      const joinTheGameColorOrNumberApiCall = await axios.post(joinTheGameColorOrNumberApi);
-      console.log(joinTheGameColorOrNumberApiCall.data, "DEBUG@313 ::::::::::: joinTheGameColorOrNumberApiCall.data")
-
+      const joinTheGameColorOrNumberApiCall = await axios.post(
+        joinTheGameColorOrNumberApi
+      );
+    
+      
     } catch (error) {
-      setInsufficientFunds(true)
-      return
+      setInsufficientFunds(true);
+      return;
     }
-
 
     setPopupVisible(false);
     setSelectedNumber(null);
-    setButtonColor("")
-    fetchRechargeData()
+    setSelectedImage(null);
+    setButtonColor("");
+    setGlobalSelected(null);
+    fetchRechargeData();
   };
 
   const handleClosePopup = () => {
     setPopupVisible(false);
     setSelectedNumber(null);
-    setButtonColor("")
-    setInsufficientFunds(false)
-  }
+    setSelectedImage(null);
+    setButtonColor("");
+    setGlobalSelected(null);
+    setInsufficientFunds(false);
+  };
 
   const handleOutsideClick = (e) => {
     if (e.target.id === "popup-overlay") {
@@ -180,25 +196,26 @@ const GameDashboard = () => {
   const handleBadgeClick = (number) => {
     if (counter > 30) {
       setSelectedNumber(number);
+      setGlobalSelected(number);
       setPopupVisible(true);
       setTotalContractMoney(contractMoney * midNumber);
     }
   };
 
-  const handleImageClick = (index, image) => {
+  const handleImageClick = (index, image, selected) => {
     if (counter > 30) {
-      console.log(index, 'index')
-      console.log(image, 'image')
       setPopupVisible(true);
+      setSelectedImage(selected);
+      setGlobalSelected(image);
+      setSelectedImageName(image);
     }
   };
 
   useEffect(() => {
-    fetchLatestPeriod()
-    fetchLatestResults()
-    fetchRechargeData()
-  }, [])
-
+    fetchLatestPeriod();
+    fetchLatestResults();
+    fetchRechargeData();
+  }, []);
 
   const minutes = Math.floor(counter / 60);
   const seconds = counter % 60;
@@ -210,8 +227,9 @@ const GameDashboard = () => {
 
     switch (number) {
       case 0:
-      case 5:
         return `bg-half-black-red text-white`;
+      case 5:
+        return `bg-half-black-yellow text-white`;
       case 1:
       case 4:
       case 7:
@@ -228,30 +246,24 @@ const GameDashboard = () => {
     }
   };
 
-
   const isDisabled = counter <= 30;
 
   const increaseMidNumber = (value) => {
-    setMidNumber(prev => prev + value);
+    setMidNumber((prev) => prev + value);
   };
 
   const decreaseMidNumber = (value) => {
-    const decNumber = midNumber - value
-    console.log(decNumber, "decNumber")
-    if (value === 5 && decNumber <= 0) {
-      return
-
+    const decNumber = midNumber - value;
+     if (value === 5 && decNumber <= 0) {
+      return;
     }
 
-    setMidNumber(prev => Math.max(1, prev - value));
-
+    setMidNumber((prev) => Math.max(1, prev - value));
   };
 
   useEffect(() => {
-
     setTotalContractMoney(contractMoney * midNumber);
   }, [contractMoney, midNumber]);
-
 
   useEffect(() => {
     counterRef.current = counter; // Update ref whenever counter changes
@@ -276,7 +288,7 @@ const GameDashboard = () => {
 
     // Local countdown timer
     const countdownInterval = setInterval(() => {
-      setCounter(prevCounter => {
+      setCounter((prevCounter) => {
         if (prevCounter > 0) {
           return prevCounter - 1;
         } else {
@@ -331,14 +343,9 @@ const GameDashboard = () => {
       clearInterval(countdownInterval);
       clearInterval(syncInterval);
     };
-
   }, [isSyncing]);
 
-  const imageNames = [
-    'cow', 'bucket', 'kite', 'lattu', 'rose', 'butterfly', 'peageon', 'rabbit',
-    'umbrella', 'football', 'sun', 'diya'
-  ];
-
+  //  console.log(globalSelected , "DEBUG@313 ::: setGlobalSelected" )
   return (
     <div className="p-3 bg-white shadow-md rounded-lg font-serif max-w-md mx-auto sm:max-w-lg lg:max-w-xl sm:p-6 lg:p-8">
       <div className="flex justify-between items-center mb-4 sm:mb-6">
@@ -349,19 +356,33 @@ const GameDashboard = () => {
         <div className="mx-2 text-center">
           <p className="font-bold text-sm sm:text-lg">Count Down</p>
           <div className="flex space-x-1">
-            {minutes.toString().padStart(2, '0').split('').map((digit, index) => (
-              <div key={`minute-${index}`} className="bg-gray-200 rounded-md p-1 w-8 text-center">
-                <p className="text-lg font-semibold">{digit}</p>
-              </div>
-            ))}
-            <div >
+            {minutes
+              .toString()
+              .padStart(2, "0")
+              .split("")
+              .map((digit, index) => (
+                <div
+                  key={`minute-${index}`}
+                  className="bg-gray-200 rounded-md p-1 w-8 text-center"
+                >
+                  <p className="text-lg font-semibold">{digit}</p>
+                </div>
+              ))}
+            <div>
               <p className="text-xl font-semibold">:</p>
             </div>
-            {seconds.toString().padStart(2, '0').split('').map((digit, index) => (
-              <div key={`second-${index}`} className="bg-gray-200 rounded-md p-1 w-8 text-center">
-                <p className="text-lg font-semibold">{digit}</p>
-              </div>
-            ))}
+            {seconds
+              .toString()
+              .padStart(2, "0")
+              .split("")
+              .map((digit, index) => (
+                <div
+                  key={`second-${index}`}
+                  className="bg-gray-200 rounded-md p-1 w-8 text-center"
+                >
+                  <p className="text-lg font-semibold">{digit}</p>
+                </div>
+              ))}
           </div>
         </div>
       </div>
@@ -369,29 +390,45 @@ const GameDashboard = () => {
       <div className="flex justify-center items-center gap-3 mt-3 sm:mt-5">
         <div className="flex-1">
           <button
-            className={`w-full h-[2.5rem] rounded-md shadow-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg ${isDisabled ? "bg-gray-300 cursor-not-allowed" : "bg-gradient-to-r from-red-600 to-red-400"}`}
+            className={`w-full h-[2.5rem] rounded-md shadow-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg ${
+              isDisabled
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-gradient-to-r from-red-600 to-red-400"
+            }`}
             onClick={() => handleButtonClick("RED")}
             disabled={isDisabled}
           >
-            <span className="text-white font-semibold text-sm sm:text-md">Join Red</span>
+            <span className="text-white font-semibold text-sm sm:text-md">
+              Join Red
+            </span>
           </button>
         </div>
         <div className="flex-1">
           <button
-            className={`w-full h-[2.5rem] rounded-md shadow-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg ${isDisabled ? "bg-gray-300 cursor-not-allowed" : "bg-gradient-to-r from-yellow-600 to-yellow-400"}`}
+            className={`w-full h-[2.5rem] rounded-md shadow-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg ${
+              isDisabled
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-gradient-to-r from-yellow-600 to-yellow-400"
+            }`}
             onClick={() => handleButtonClick("YELLOW")}
             disabled={isDisabled}
           >
-            <span className="text-white font-semibold text-sm sm:text-md">Join Yellow</span>
+            <span className="text-white font-semibold text-sm sm:text-md">
+              Join Yellow
+            </span>
           </button>
         </div>
         <div className="flex-1">
           <button
-            className={`w-full h-[2.5rem] rounded-md shadow-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg ${isDisabled ? "bg-gray-300 cursor-not-allowed" : "bg-black"}`}
+            className={`w-full h-[2.5rem] rounded-md shadow-md transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg ${
+              isDisabled ? "bg-gray-300 cursor-not-allowed" : "bg-black"
+            }`}
             onClick={() => handleButtonClick("BLACK")}
             disabled={isDisabled}
           >
-            <span className="text-white font-semibold text-sm sm:text-md">Join Black</span>
+            <span className="text-white font-semibold text-sm sm:text-md">
+              Join Black
+            </span>
           </button>
         </div>
       </div>
@@ -411,7 +448,9 @@ const GameDashboard = () => {
             disabled={isDisabled}
           >
             <Badge
-              className={`h-8 w-8 sm:h-10 sm:w-10 text-xs sm:text-sm font-bold ${badgeBackgroundStyles(index)}`}
+              className={`h-8 w-8 sm:h-10 sm:w-10 text-xs sm:text-sm font-bold ${badgeBackgroundStyles(
+                index
+              )}`}
               content={index}
             />
           </button>
@@ -428,7 +467,9 @@ const GameDashboard = () => {
             disabled={isDisabled}
           >
             <Badge
-              className={`h-8 w-8 sm:h-10 sm:w-10 text-xs sm:text-sm font-bold ${badgeBackgroundStyles(number)}`}
+              className={`h-8 w-8 sm:h-10 sm:w-10 text-xs sm:text-sm font-bold ${badgeBackgroundStyles(
+                number
+              )}`}
               content={number}
             />
           </button>
@@ -446,10 +487,16 @@ const GameDashboard = () => {
         {[...Array(12)].map((_, index) => (
           <div
             key={index}
-            className={`relative w-full h-24 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-lg shadow-lg p-1 ${counter <= 30 ? 'opacity-50 cursor-not-allowed' : '' // Disable if counter is <= 30
-              }`}
-            onClick={() => handleImageClick(index + 1, imageNames[index])} // Send both index and name
-
+            className={`relative w-full h-24 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-lg shadow-lg p-1 ${
+              counter <= 30 ? "opacity-50 cursor-not-allowed" : "" // Disable if counter is <= 30
+            }`}
+            onClick={() =>
+              handleImageClick(
+                index + 1,
+                imageNames[index]["name"],
+                imageNames[index]["selected"]
+              )
+            } // Send both index and name
           >
             <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-inner hover:scale-105 transform transition-transform duration-200">
               <img
@@ -474,44 +521,48 @@ const GameDashboard = () => {
 
         {/* Table Wrapper for Scrollable Body */}
         <div className="overflow-y-auto max-h-[300px] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 rounded-lg">
-          <table className="min-w-full border-collapse rounded-lg overflow-hidden text-xs">
-            <thead>
-              <tr className="bg-gray-100 text-gray-800 border-b-2 border-gray-300">
-                <th className="p-2 text-left font-medium uppercase tracking-wider">Period</th>
-                <th className="p-2 text-left font-medium uppercase tracking-wider">Number</th>
-                <th className="p-2 text-center font-medium uppercase tracking-wider">Color</th>
-              </tr>
-            </thead>
-            <tbody>
-              {allResults.map((order, index) => (
-                <tr
-                  key={order.id}
-                  className={`${index === 0 ? 'bg-yellow-100' : 'bg-white'
-                    } hover:bg-gray-50 transition-colors duration-150`}
-                >
-                  <td className="p-2 border-b border-gray-200 text-gray-900">{order.period}</td>
-                  <td className="p-2 border-b border-gray-200 text-gray-900 text-center">
-                    {order.wonNumber}
-                  </td>
-                  <td className="p-2 border-b border-gray-200 text-center">
-                    {/* Circular color indicator with border */}
-                    <div
-                      className={`w-5 h-5 inline-block rounded-full border border-gray-300 ${getColorClass(
-                        order.wonColor
-                      )}`}
-                    ></div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+  <table className="min-w-full border-collapse rounded-lg overflow-hidden text-xs">
+    <thead>
+      <tr className="bg-gray-100 text-gray-800 border-b-2 border-gray-300">
+        <th className="p-2 text-left font-medium uppercase tracking-wider">Period</th>
+        <th className="p-2 text-left font-medium uppercase tracking-wider">Number</th>
+        <th className="p-2 text-center font-medium uppercase tracking-wider">Color</th>
+        <th className="p-2 text-center font-medium uppercase tracking-wider">Image</th>
+      </tr>
+    </thead>
+    <tbody>
+      {allResults.map((order, index) => (
+        <tr
+          key={order.id}
+          className={`${
+            index === 0 ? "bg-yellow-100" : "bg-white"
+          } hover:bg-gray-50 transition-colors duration-150`}
+        >
+          <td className="p-2 border-b border-gray-200 text-gray-900">{order.period}</td>
+          <td className="p-2 border-b border-gray-200 text-gray-900 text-center">{order.wonNumber}</td>
+          <td className="p-2 border-b border-gray-200 text-center">
+            {/* Circular color indicator with border */}
+            <div
+              className={`w-5 h-5 inline-block rounded-full border border-gray-300 ${getColorClass(
+                order.wonColor
+              )}`}
+            ></div>
+          </td>
+          <td className="p-2 border-b border-gray-200 text-center">
+            <img
+           src={`../assets/${order.wonTNumber }.png`} // Dummy image URL with randomization
+           alt={`Placeholder ${index}`}
+           className="w-10 h-10 rounded-lg object-cover"
+
+            />
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
       </div>
-
-
-
-
-
 
       {isPopupVisible && (
         <div
@@ -521,16 +572,21 @@ const GameDashboard = () => {
         >
           <div className="p-4 bg-white shadow-lg rounded-2xl w-[95%] max-w-sm mx-auto sm:w-full sm:max-w-md sm:p-6 transition-all transform ease-in-out">
             <h2 className="font-semibold text-xl mb-4 text-center text-gray-800">
-              {selectedNumber !== null ? `Join ${selectedNumber}` : buttonColor}
+              {`Join ${globalSelected}`}
             </h2>
 
-            <p className="text-base font-medium text-gray-700">Contract Money</p>
+            <p className="text-base font-medium text-gray-700">
+              Contract Money
+            </p>
             <div className="flex space-x-1 mb-4">
               {[10, 100, 1000].map((value) => (
                 <button
                   key={value}
-                  className={`flex-1 py-2 text-sm rounded-lg transition-all duration-200 ${contractMoney === value ? "bg-pink-400 text-white" : "bg-gray-200 text-gray-700"
-                    } hover:bg-pink-300 hover:text-white`}
+                  className={`flex-1 py-2 text-sm rounded-lg transition-all duration-200 ${
+                    contractMoney === value
+                      ? "bg-pink-400 text-white"
+                      : "bg-gray-200 text-gray-700"
+                  } hover:bg-pink-300 hover:text-white`}
                   onClick={() => setContractMoney(value)}
                 >
                   {value}
@@ -555,7 +611,9 @@ const GameDashboard = () => {
                 </button>
               </div>
 
-              <div className="text-3xl font-bold text-gray-800">{midNumber}</div>
+              <div className="text-3xl font-bold text-gray-800">
+                {midNumber}
+              </div>
 
               <div className="flex space-x-2">
                 <button
@@ -575,7 +633,9 @@ const GameDashboard = () => {
 
             <p className="text-base text-gray-700 font-medium mb-6">
               Total Contract money is&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <span className="font-bold text-indigo-500 text-2xl">₹{totalContractMoney}</span>
+              <span className="font-bold text-indigo-500 text-2xl">
+                ₹{totalContractMoney}
+              </span>
             </p>
 
             {/* Error message for insufficient funds */}
@@ -585,7 +645,6 @@ const GameDashboard = () => {
               </p>
             )}
 
-
             <div className="flex justify-center mt-4 p-1 space-x-2">
               <button
                 className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-200 text-white text-sm rounded-lg px-6 py-2 h-[2.5rem] shadow-md transition-all duration-200"
@@ -593,19 +652,18 @@ const GameDashboard = () => {
               >
                 Cancel
               </button>
-              {!insufficientFunds && (<button
-                className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-200 text-white text-sm rounded-lg px-6 py-2 h-[2.5rem] shadow-md transition-all duration-200"
-                onClick={handleConfirmPopup}
-              >
-                Confirm
-              </button>)}
+              {!insufficientFunds && (
+                <button
+                  className="bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-200 text-white text-sm rounded-lg px-6 py-2 h-[2.5rem] shadow-md transition-all duration-200"
+                  onClick={handleConfirmPopup}
+                >
+                  Confirm
+                </button>
+              )}
             </div>
-
           </div>
-
         </div>
       )}
-
     </div>
   );
 };
