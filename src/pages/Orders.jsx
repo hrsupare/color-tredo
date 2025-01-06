@@ -189,65 +189,66 @@ const Orders = () => {
     return "bg-gray-300";
   };
 
-  return (
-    <div className="p-2 sm:p-4 bg-white min-h-screen font-serif">
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-4 sm:p-6">
-        <h1 className="text-xl sm:text-2xl font-semibold text-indigo-800 mb-4 sm:mb-6 text-center">
-          {isLiveOrders ? "Pending Orders" : "Complete Orders"}
-        </h1>
+ return (
+  <div className="p-2 sm:p-4 bg-white min-h-screen font-serif">
+    <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-4 sm:p-6">
+      <h1 className="text-lg sm:text-2xl font-semibold text-indigo-800 mb-4 sm:mb-6 text-center">
+        {isLiveOrders ? "Pending Orders" : "Complete Orders"}
+      </h1>
 
-        <div className="flex justify-center mb-3 sm:mb-4">
-          <button
-            className={`px-2 py-1 sm:px-4 sm:py-2 font-medium rounded-l ${
-              isLiveOrders
-                ? "bg-indigo-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            }`}
-            onClick={() => setIsLiveOrders(true)}
-          >
-            Pending Orders
-          </button>
-          <button
-            className={`px-2 py-1 sm:px-4 sm:py-2 font-medium rounded-r ${
-              !isLiveOrders
-                ? "bg-indigo-600 text-white"
-                : "bg-gray-200 text-gray-700"
-            }`}
-            onClick={() => setIsLiveOrders(false)}
-          >
-            Complete Orders
-          </button>
+      <div className="flex justify-center mb-3 sm:mb-4">
+        <button
+          className={`px-2 py-1 text-sm sm:text-base font-medium rounded-l ${
+            isLiveOrders
+              ? "bg-indigo-600 text-white"
+              : "bg-gray-200 text-gray-700"
+          }`}
+          onClick={() => setIsLiveOrders(true)}
+        >
+          Pending Orders
+        </button>
+        <button
+          className={`px-2 py-1 text-sm sm:text-base font-medium rounded-r ${
+            !isLiveOrders
+              ? "bg-indigo-600 text-white"
+              : "bg-gray-200 text-gray-700"
+          }`}
+          onClick={() => setIsLiveOrders(false)}
+        >
+          Complete Orders
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="flex items-center justify-center h-24">
+          <p className="text-indigo-500 text-lg font-medium">Loading...</p>
         </div>
-
-        {loading ? (
-          <div className="flex items-center justify-center h-24">
-            <p className="text-indigo-500 text-lg font-medium">Loading...</p>
-          </div>
-        ) : error ? (
-          <div className="flex items-center justify-center h-24">
-            <p className="text-red-500 text-lg font-medium">{error}</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
+      ) : error ? (
+        <div className="flex items-center justify-center h-24">
+          <p className="text-red-500 text-lg font-medium">{error}</p>
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <div className="max-h-96 overflow-y-auto">
             <table className="min-w-full border-collapse text-xs sm:text-sm">
               <thead className="bg-gray-100 text-indigo-700">
                 <tr>
-                  <th className="px-2 sm:px-3 py-2 text-center font-semibold border-b border-gray-200">
+                  <th className="px-1 sm:px-2 py-1 text-center font-semibold border-b border-gray-200">
                     Period
                   </th>
-                  <th className="px-2 sm:px-3 py-2 text-center font-semibold border-b border-gray-200">
+                  <th className="px-1 sm:px-2 py-1 text-center font-semibold border-b border-gray-200">
                     Amount
                   </th>
-                  <th className="px-2 sm:px-3 py-2 text-center font-semibold border-b border-gray-200">
+                  <th className="px-1 sm:px-2 py-1 text-center font-semibold border-b border-gray-200">
                     Status
                   </th>
-                  <th className="px-2 sm:px-3 py-2 text-center font-semibold border-b border-gray-200">
+                  <th className="px-1 sm:px-2 py-1 text-center font-semibold border-b border-gray-200">
                     Numbers
                   </th>
-                  <th className="px-2 sm:px-3 py-2 text-center font-semibold border-b border-gray-200">
+                  <th className="px-1 sm:px-2 py-1 text-center font-semibold border-b border-gray-200">
                     Color
                   </th>
-                  <th className="px-2 sm:px-3 py-2 text-center font-semibold border-b border-gray-200">
+                  <th className="px-1 sm:px-2 py-1 text-center font-semibold border-b border-gray-200">
                     Image
                   </th>
                 </tr>
@@ -263,31 +264,30 @@ const Orders = () => {
                         index % 2 === 0 ? "bg-gray-50" : "bg-white"
                       } hover:bg-indigo-50 transition-colors`}
                     >
-                      <td className="px-2 sm:px-3 py-2 border-b border-gray-200 text-center text-gray-800">
+                      <td className="px-1 sm:px-2 py-1 border-b border-gray-200 text-center text-gray-800">
                         {order.period}
                       </td>
-                      <td className="px-2 sm:px-3 py-2 border-b border-gray-200 text-center text-gray-800">
+                      <td className="px-1 sm:px-2 py-1 border-b border-gray-200 text-center text-gray-800">
                         {order.amount}
                       </td>
-                      <td className="px-2 sm:px-3 py-2 border-b border-gray-200 text-center text-gray-800 font-semibold">
+                      <td className="px-1 sm:px-2 py-1 border-b border-gray-200 text-center text-gray-800 font-semibold">
                         {getWinStatus(order)}
                       </td>
-                      <td className="px-2 sm:px-3 py-2 border-b border-gray-200 text-center text-gray-800">
+                      <td className="px-1 sm:px-2 py-1 border-b border-gray-200 text-center text-gray-800">
                         {getTrueNumberWord(order)}
                       </td>
-                      <td className="px-2 sm:px-3 py-2 border-b border-gray-200 text-center">
+                      <td className="px-1 sm:px-2 py-1 border-b border-gray-200 text-center">
                         <span
                           className={`inline-block w-3 h-3 sm:w-4 sm:h-4 rounded-full ${getColorBadgeClass(
                             order
                           )}`}
                         />
                       </td>
-
-                      <td className="px-2 sm:px-3 py-2 border-b border-gray-200 text-center">
+                      <td className="px-1 sm:px-2 py-1 border-b border-gray-200 text-center">
                         <img
-                          src={`../assets/${getTrueImage(order)}.png`} // Dummy image URL
+                          src={`../assets/${getTrueImage(order)}.png`}
                           alt={`Random Placeholder ${index}`}
-                          className="w-10 h-10 rounded-lg object-cover"
+                          className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg object-cover"
                         />
                       </td>
                     </tr>
@@ -295,11 +295,13 @@ const Orders = () => {
               </tbody>
             </table>
           </div>
-        )}
-        <BottomNavBar />
-      </div>
+        </div>
+      )}
+      <BottomNavBar />
     </div>
-  );
+  </div>
+);
+
 };
 
 export default Orders;
