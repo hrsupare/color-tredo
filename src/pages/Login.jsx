@@ -51,10 +51,11 @@ const Login = () => {
 
     const URL = `${BASE_URL}jwt/login`;
     try {
-      const createLogin = await axios.post(URL, {
-        username: email,
-        password: password,
-      });
+      const createLogin = await axios.post(
+        URL,
+        { username: email, password: password },
+        { timeout: 10000 }
+      );
 
       const token = createLogin.data;
 
@@ -63,12 +64,13 @@ const Login = () => {
         setLoading(false);
         return;
       }
+
       const decoded = jwtDecode(token);
-       const response = await axios.get(
+      const response = await axios.get(
         `${BASE_URL}userGame/getByUserId?userID=${decoded.userId}`
       );
       const data = await response.data;
-       localStorage.setItem("authToken", token);
+      localStorage.setItem("authToken", token);
       localStorage.setItem("referenceId", data.object.referenceId);
       localStorage.setItem("userId", decoded.userId);
       localStorage.setItem("role", decoded.roles);
@@ -81,6 +83,7 @@ const Login = () => {
           },
         });
       }
+
       if (decoded.roles.includes("ADMIN")) {
         navigate("/admin", {
           state: {
@@ -90,10 +93,12 @@ const Login = () => {
           },
         });
       }
+
       if (decoded.roles.includes("USER")) {
         navigate("/home");
       }
     } catch (error) {
+      console.log(error, "DEBUG@313 :::::::::;; error");
       if (error.response) {
         if (error.response.status === 401) {
           setErrorMessage("Unauthorized: Invalid username or password");
