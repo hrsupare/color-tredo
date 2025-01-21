@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook for navigation
+import { useNavigate } from 'react-router-dom';
 import { FaUserCircle, FaFileAlt, FaRupeeSign, FaTelegramPlane, FaSignOutAlt } from "react-icons/fa";
 import BottomNavBar from '../Components/Navbar/BottomNavBar';
 import { BASE_URL } from '../../constant';
-import { ProfileNav } from '../Components/Navbar/ProfileNav';
 
 const Profile = () => {
     const [userData, setUserData] = useState(null);
     const userId = localStorage.getItem('userId');
-    const navigate = useNavigate(); // Initialize navigate for navigation
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -38,34 +37,33 @@ const Profile = () => {
     };
 
     return (
-
         <div>
-            {/* <ProfileNav/> */}
-        <div className='flex flex-col items-center justify-center  gap-2 p-2 bg-gra max-w-lg mx-auto w-full transition-all duration-500'>
-            <div className="flex justify-center items-center p-2 w-full">
-                <div className="bg-white w-full rounded-lg shadow-lg p-4">
-                    {/* User Information */}
-                    <div className="flex items-center mb-4">
-                        <FaUserCircle className="text-6xl text-gray-500" />
-                        <div className="ml-4">
-                            {userData ? (
-                                <>
-                                    <h2 className="text-lg font-bold">{userData.name}</h2>
-                                    <p className="text-gray-500">
-                                        Mob: {userData.mobileNo} | ID: {userData.referenceId}
-                                    </p>
-                                </>
-                            ) : (
-                                <p className="text-gray-500">Loading...</p>
-                            )}
+            <div className='flex flex-col items-center justify-center gap-2 p-2 bg-gray-100 max-w-lg mx-auto w-full transition-all duration-500'>
+                <div className="flex justify-center items-center p-2 w-full">
+                    <div className="bg-white w-full rounded-lg shadow-lg p-4">
+                        <div className="flex items-center mb-4">
+                            <FaUserCircle className="text-6xl text-gray-500" />
+                            <div className="ml-4">
+                                {userData ? (
+                                    <>
+                                        <h2 className="text-lg font-bold">{userData.name}</h2>
+                                        <p className="text-gray-500">
+                                            Mob: {userData.mobileNo} | ID: {userData.referenceId}
+                                        </p>
+                                    </>
+                                ) : (
+                                    <div className="animate-pulse space-y-2">
+                                        <div className="h-4 bg-gray-300 rounded w-24"></div>
+                                        <div className="h-3 bg-gray-300 rounded w-36"></div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="flex justify-center items-center p-2 w-full">
-                <div className="bg-white w-full rounded-lg shadow-lg p-4">
-                    <div className="flex items-center mb-4">
+                <div className="flex justify-center items-center p-2 w-full">
+                    <div className="bg-white w-full rounded-lg shadow-lg p-4">
                         <ul className="divide-y divide-gray-200">
                             <li className="flex items-center justify-between py-3">
                                 <div className="flex items-center">
@@ -94,11 +92,11 @@ const Profile = () => {
                         </ul>
                     </div>
                 </div>
+
+                <BottomNavBar />
             </div>
-            <BottomNavBar />
-        </div >
         </div>
     );
-}
+};
 
 export default Profile;

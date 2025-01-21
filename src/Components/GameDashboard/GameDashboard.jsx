@@ -345,8 +345,7 @@ const GameDashboard = () => {
     };
   }, [isSyncing]);
 
-  //  console.log(globalSelected , "DEBUG@313 ::: setGlobalSelected" )
-  return (
+   return (
     <div className="p-3 bg-white shadow-md rounded-lg font-serif max-w-md mx-auto sm:max-w-lg lg:max-w-xl sm:p-6 lg:p-8">
       <div className="flex justify-between items-center mb-4 sm:mb-6">
         <div className="mx-2">

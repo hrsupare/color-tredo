@@ -14,13 +14,13 @@ import { BASE_URL } from '../../constant';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    name: 'USER',
     email: '',
     mobileNo: '',
     roles: 'USER',
     password: '',
     confirmPassword: '',
-    referralId: '',
+    // referralId: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -39,8 +39,8 @@ const SignUp = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.name) newErrors.name = 'Name is required';
-    if (!formData.email) newErrors.email = 'Email is required';
+    // if (!formData.name) newErrors.name = 'Name is required';
+    // if (!formData.email) newErrors.email = 'Email is required';
     if (!formData.mobileNo) newErrors.mobileNo = 'Mobile number is required';
     if (!formData.password) newErrors.password = 'Password is required';
     if (formData.password !== formData.confirmPassword) {
@@ -60,14 +60,14 @@ const SignUp = () => {
 
       try {
         let obj = {
-          name: formData.name,
-          email: formData.email,
+          name: "USER",
+          email: formData.mobileNo,
           mobileNo: formData.mobileNo,
           roles: "USER",
           password: formData.password,
-          referralId: formData.referralId,
+          referralId: "",
         };
-         
+         console.log(obj , "obj")
         const response = await axios.post(URL, obj);
 
          if (response.data.code === "Successful") {
@@ -103,7 +103,7 @@ const SignUp = () => {
           </Typography>
         </CardHeader>
         <CardBody className="flex flex-col gap-4 px-6 py-4">
-          <Input
+          {/* <Input
             label="Name"
             size="lg"
             className="text-black"
@@ -114,9 +114,9 @@ const SignUp = () => {
             onChange={handleChange}
             error={!!errors.name}
           />
-          {errors.name && <Typography color="red">{errors.name}</Typography>}
+          {errors.name && <Typography color="red">{errors.name}</Typography>} */}
 
-          <Input
+          {/* <Input
             label="Email"
             size="lg"
             className="text-black"
@@ -127,7 +127,7 @@ const SignUp = () => {
             onChange={handleChange}
             error={!!errors.email}
           />
-          {errors.email && <Typography color="red">{errors.email}</Typography>}
+          {errors.email && <Typography color="red">{errors.email}</Typography>} */}
 
           <Input
             label="Mobile Number"
@@ -170,7 +170,7 @@ const SignUp = () => {
           />
           {errors.confirmPassword && <Typography color="red">{errors.confirmPassword}</Typography>}
 
-          <Input
+          {/* <Input
             label="Referral ID (Optional)"
             size="lg"
             className="text-black"
@@ -179,7 +179,7 @@ const SignUp = () => {
             name="referralId"
             value={formData.referralId}
             onChange={handleChange}
-          />
+          /> */}
           {errorMessage && <Typography color="red">{errorMessage}</Typography>}
         </CardBody>
         <CardFooter className="pt-0 px-6 pb-6">

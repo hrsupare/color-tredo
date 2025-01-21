@@ -98,7 +98,7 @@ const Login = () => {
         navigate("/home");
       }
     } catch (error) {
-      console.log(error, "DEBUG@313 :::::::::;; error");
+      
       if (error.response) {
         if (error.response.status === 401) {
           setErrorMessage("Unauthorized: Invalid username or password");
@@ -140,7 +140,7 @@ const Login = () => {
         </CardHeader>
         <CardBody className="flex flex-col gap-6 px-6 py-4">
           <Input
-            label="Email"
+            label="Phone No"
             size="lg"
             className="text-gray-900"
             value={email}
